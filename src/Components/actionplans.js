@@ -152,7 +152,7 @@ export default class ActionPlan extends Component {
   }
   render() {
     const newss = this.state.NEWS.map((news, i) => (
-      <li key={news._id}>
+      <li key={news._id} className="list hvr-sweep-to-right">
         <span style={{ display: "inline", listStyleType: "none" }}>
           {" "}
           {i + 1}.{" "}
@@ -192,7 +192,7 @@ export default class ActionPlan extends Component {
                 <h4 style={{ color: "white" }}>Latest Updates </h4>
               </center>
               <div>
-                <ul>{sswen10}</ul>
+                <ul className="ulist">{sswen10}</ul>
               </div>
             </div>
             <div
@@ -215,7 +215,7 @@ export default class ActionPlan extends Component {
                         this.state.actionplan[0].id
                       )}
                     >
-                      <div className="cardimg-thumbnail card-img">
+                      <div className="cardimg-thumbnail card-img hvr-grow">
                         <img
                           className="card-img-top cit action"
                           src={cert}
@@ -238,7 +238,7 @@ export default class ActionPlan extends Component {
                         this.state.actionplan[1].id
                       )}
                     >
-                      <div className="cardimg-thumbnail card-img">
+                      <div className="cardimg-thumbnail card-img hvr-grow">
                         <img
                           className="card-img-top cit action"
                           src={hub}
@@ -260,7 +260,7 @@ export default class ActionPlan extends Component {
                         this.state.actionplan[2].id
                       )}
                     >
-                      <div className="cardimg-thumbnail card-img">
+                      <div className="cardimg-thumbnail card-img hvr-grow">
                         <img
                           className="card-img-top cit action"
                           src={mobile1}
@@ -282,7 +282,7 @@ export default class ActionPlan extends Component {
                         this.state.actionplan[3].id
                       )}
                     >
-                      <div className="cardimg-thumbnail card-img">
+                      <div className="cardimg-thumbnail card-img hvr-grow">
                         <img
                           className="card-img-top cit action"
                           src={legal}
@@ -307,7 +307,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[4].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={norm}
@@ -329,7 +329,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[5].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={exit1}
@@ -351,7 +351,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[6].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={fund}
@@ -373,7 +373,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[7].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={fund2}
@@ -397,7 +397,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[8].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={tax}
@@ -419,7 +419,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[9].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={tax1}
@@ -441,7 +441,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[10].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={tax3}
@@ -463,7 +463,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[11].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={fest1}
@@ -487,7 +487,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[12].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={mission}
@@ -509,7 +509,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[13].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={incubator}
@@ -531,7 +531,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[14].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={innovation}
@@ -553,7 +553,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[15].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={research}
@@ -577,7 +577,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[16].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={biotech}
@@ -600,7 +600,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[17].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={studentinno}
@@ -622,7 +622,7 @@ export default class ActionPlan extends Component {
                       this.state.actionplan[18].id
                     )}
                   >
-                    <div className="cardimg-thumbnail card-img">
+                    <div className="cardimg-thumbnail card-img hvr-grow">
                       <img
                         className="card-img-top cit action"
                         src={annual}
