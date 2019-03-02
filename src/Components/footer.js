@@ -35,7 +35,7 @@ export default class Footer extends Component {
             </div>
   
             <div className="footer-right">
-              <p className="footer-company-about">
+              <p className="footer-about">
                 <span>About Us</span>
                 This website tracks the day to day activities of startup India
                 Action Plan
