@@ -205,7 +205,6 @@ class Archive extends Component {
       </li>
     ));
 
-<<<<<<< HEAD
     return (
       <div>
         <div>
@@ -328,32 +327,6 @@ class Archive extends Component {
                   >
                     View File
                   </button>
-=======
-                                            <button onClick={this.delete.bind(this)} type="button" class="btn btn-outline-danger momtbtn1" style={{ display: this.state.isDisplay ? 'inline' : 'none' }}>Delete MOM</button>
-                                           <button onClick={this.view.bind(this)} type="button" class="btn btn-outline-warning momtbtn2" style={{ display: this.state.isDisplay ? 'inline' : 'none' }}>View File</button>
-                                        </div>
-                                    </div>
-                                )
-                                :
-                                (
-                                    <div id="plans" className="col-lg-8 col-md-8" style={{ border: '1px solid brown', borderRadius: '1em' }}>
-                                        <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}> Create Minutes Of Meeting</h1></u></center>
-                                        <div className="container">
-                                            <br></br><br></br>
-                                            <p className='templatelabel'>Action Point Reference:<input type='text' className='form-control tempinp' value={this.state.MOMs.ap} onChange={this.ap.bind(this)}></input></p>
-                                            <p className='templatelabel'>Objective:<input type='text' className='form-control tempinp' value={this.state.MOMs.objective} onChange={this.objective.bind(this)}></input></p>
-                                            <p className='templatelabel'>Duration(Minutes):<input type='text' className='form-control tempinp' value={this.state.MOMs.duration} onChange={this.duration.bind(this)}></input></p>
-                                            <p className='templatelabel'>Attendees:<input type='text' className='form-control tempinp' value={this.state.MOMs.pAttend} onChange={this.pAttend.bind(this)}></input></p>
-                                            <p className='templatelabel'>Agenda:<input type='text' className='form-control tempinp' value={this.state.MOMs.agenda} onChange={this.agenda.bind(this)}></input></p>
-                                            
-                                            <button type="submit" onClick={this.createMOM.bind(this)} class="btn btn-outline-primary momtbtn8">Click To Create MOM</button>
-                                            
-                                        </div>
-                                    </div>
-                                )
-                        }
-                    </div>
->>>>>>> f8d11997e30133797b6e335929759d1cd17d5722
                 </div>
               </div>
             ) : (
