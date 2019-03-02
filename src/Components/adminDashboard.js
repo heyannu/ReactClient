@@ -134,11 +134,7 @@ export default class AdminDashboard extends Component {
             });
     }
     findap(e, event) {
-        benef: [{
-            nos: '',
-            ad: 0,
-            apNo: 0
-        }],
+
         this.state.benef[0].nos = this.state.incub[0].noi = ''
         this.state.benef[0].ad = this.state.benef[0].apNo= this.state.incub[0].ai = this.state.incub[0].apNo = 0
         this.setState({
