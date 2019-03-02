@@ -7,7 +7,67 @@ import "../Assets/css/actionplan.css";
 export default class Contact extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      email:'',
+      fname:'',
+      lname: '',
+      subject: ''
+
+    };
+  }
+  fname(e){
+    this.state.fname = e.target.value;
+        this.setState({
+            fname: this.state.fname
+        })
+  }
+  lname(e){
+    this.state.lname = e.target.value;
+        this.setState({
+            lname: this.state.lname
+        })
+  }
+  email(e){
+    this.state.email = e.target.value;
+        this.setState({
+            email: this.state.email
+        })
+  }
+  subject(e){
+    this.state.subject = e.target.value;
+        this.setState({
+            subject: this.state.subject
+        })
+  }
+  send(e) {
+    e.preventDefault();
+    console.log(this.state)
+    fetch('http://localhost:5000/api/contact/send',
+    {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            email: this.state.email,
+            fname: this.state.lname,
+            lname: this.state.lname,
+            subject: this.state.subject
+
+        }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+        this.setState({
+            success: responseJson.success,
+            message: responseJson.message,
+            email: responseJson
+        })
+    })
+    .catch((error) => {
+        console.error(error);
+    });
   }
 
   render() {
@@ -32,13 +92,14 @@ export default class Contact extends Component {
                 <div class="form-group" />
                 <div className="App">
                   <div>
-                    <form action="/">
+                    <form>
                       <label>First Name</label>
                       <input
                         type="text"
                         id="fname"
                         name="firstname"
                         placeholder="Your name.."
+                        onChange={this.fname.bind(this)}
                       />
                       <label>Last Name</label>
                       <input
@@ -46,6 +107,7 @@ export default class Contact extends Component {
                         id="lname"
                         name="lastname"
                         placeholder="Your last name.."
+                        onChange={this.lname.bind(this)}
                       />
 
                       <label>Email</label>
@@ -54,6 +116,7 @@ export default class Contact extends Component {
                         id="email"
                         name="email"
                         placeholder="Your email"
+                        onChange={this.email.bind(this)}
                       />
 
                       <label>Subject</label>
@@ -61,8 +124,9 @@ export default class Contact extends Component {
                         id="subject"
                         name="subject"
                         placeholder="Write something.."
+                        onChange={this.subject.bind(this)}
                       />
-                      <input type="submit" value="Submit" />
+                      <button type="button" onClick={this.send.bind(this)} style={{width:'8em'}} class="btn btn-outline-light">Send</button>
                     </form>
                   </div>
                 </div>
