@@ -126,7 +126,7 @@ export default class Signin extends Component {
                                 </div>
                                 <button type="submit" onClick={this.submit.bind(this)} class="btn btn-primary form-control inputs">Submit</button>
                                 <hr />
-                                <a href="#">Forgot Password?</a>
+                                {/* <a href="#">Forgot Password?</a> */}
                             </div>
                         </div>
                     </div>
