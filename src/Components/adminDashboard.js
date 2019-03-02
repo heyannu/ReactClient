@@ -237,12 +237,12 @@ export default class AdminDashboard extends Component {
                                         <h3 style={{color:'black', marginTop:'5em'}}>{this.state.User.username}</h3>
                                     </div>
                                 </center>
-                                <h5>ADMIN STATUS: {this.state.User.isAdmin}</h5>
-                                <h5>FIRST NAME: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'italic'}}>{this.state.User.firstName}</span></h5>
-                                <h5>LAST NAME: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'italic'}}>{this.state.User.lastName}</span></h5>
-                                <h5>EMAIL: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'italic'}}>{this.state.User.email}</span></h5>
-                                <h5>GENDER: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'italic'}}>{this.state.User.gender}</span></h5>
-                                <h5>DEPARTMENT: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'italic'}}>{this.state.User.department}</span></h5>
+                                <h5 style={{fontFamily:'roboto'}}>ADMIN STATUS: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'2em'}}>{this.state.User.isAdmin.toString().toUpperCase()}</span></h5>
+                                <h5 style={{fontFamily:'roboto'}}>FIRST NAME: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'3.5em'}}>{this.state.User.firstName}</span></h5>
+                                <h5 style={{fontFamily:'roboto'}}>LAST NAME: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'3.8em'}}>{this.state.User.lastName}</span></h5>
+                                <h5 style={{fontFamily:'roboto'}}>EMAIL: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'6.6em'}}>{this.state.User.email}</span></h5>
+                                <h5 style={{fontFamily:'roboto'}}>GENDER: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'5.6em'}}>{this.state.User.gender}</span></h5>
+                                <h5 style={{fontFamily:'roboto'}}>DEPARTMENT: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'2.9em'}}>{this.state.User.department}</span></h5>
                             </div>
                             <div style={{ display: this.state.show }}>
                                 <div style={{ marginTop: '8em', height: '25em' }}>
