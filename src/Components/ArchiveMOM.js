@@ -11,11 +11,13 @@ class Archive extends Component {
             MOMS: [],
             MOMs: {
             ap: '',
-            objective: '',
             duration: '',
             pAttend: '',
             agenda: '',
-            fileUpload:null
+            fileUpload:null,
+            parkingLot:'',
+            objective: '',
+            nextDate:''
             },
             fileUpload:null,
             index: 0,
@@ -54,6 +56,18 @@ class Archive extends Component {
         this.state.MOMs.agenda = e.target.value;
         this.setState({
             agenda: this.state.MOMs.agenda
+        })
+    }
+    parkingLot(e) {
+        this.state.MOMs.parkingLot = e.target.value;
+        this.setState({
+            parkingLot: this.state.MOMs.parkingLot
+        })
+    }
+    nextDate(e) {
+        this.state.MOMs.nextDate = e.target.value;
+        this.setState({
+            nextDate: this.state.MOMs.nextDate
         })
     }
     fileUpload(e) {
@@ -100,15 +114,16 @@ view(e){
     click(e) {
         const val = e.currentTarget.innerHTML;
         var r = val.split(" ")[3];
-        console.log(r)
-        this.state.display = this.state.MOMS[r - 1]
+        console.log(r);
+        this.state.display = this.state.MOMS[r - 1];
+        console.log('here',this.state.display)
         this.setState({
             index: r,
             display: this.state.display,
             isDisplay:true,
             isDisplay1:true,
             fileUpload:this.state.display.fileUpload
-        })
+        }, () =>{console.log(this.state.display)})
     }
     delete(e) {
         const id = this.state.display._id;
@@ -174,22 +189,22 @@ view(e){
                 console.error(error);
             });
     }
-    componentDidMount() {
-        fetch('http://localhost:5000/api/minutes/minutesData')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({
-                    MOMS: responseJson.amom
-                }, () => {
-                    console.log(this.state.MOMS)
+    // componentDidMount() {
+    //     fetch('http://localhost:5000/api/minutes/minutesData')
+    //         .then((response) => response.json())
+    //         .then((responseJson) => {
+    //             this.setState({
+    //                 MOMS: responseJson.amom
+    //             }, () => {
+    //                 console.log(this.state.MOMS)
 
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-            window.location.reload();
-          }
+    //             })
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    //         window.location.reload();
+    //       }
 
   componentDidMount() {
     fetch("http://localhost:5000/api/minutes/minutesData")
@@ -234,11 +249,15 @@ view(e){
                                         <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}>Minutes Of Meeting</h1></u></center>
                                         <div className="container" style={{ display: this.state.isDisplay1   ? 'inline' : 'none' }}>
                                             <br></br><br></br>
-                                            <p className='templatelabel'>Date:<span className='templatevalue'>{this.state.display.createdOn}</span></p>
+                                            <p style={{display:'inline-block', width:'25em'}} className='templatelabel'>Date:<span className='templatevalue'>{this.state.display.createdOn}</span></p>
+                                            <p style={{display:'inline-block', width:'25em', marginLeft:'2em'}} className='templatelabel'>Next Date:<span className='templatevalue'>{this.state.display.nextDate}</span></p>
+                                            <p className='templatelabel'>ActionPoint Ref:<span className='templatevalue'>{this.state.display.ap}</span></p>
                                             <p className='templatelabel'>Objective:<span className='templatevalue'>{this.state.display.objective}</span></p>
                                             <p className='templatelabel'>Duration:<span className='templatevalue'>{this.state.display.duration}</span></p>
                                             <p className='templatelabel'>Attendees:<span className='templatevalue'>{this.state.display.pAttend}</span></p>
                                             <p className='templatelabel'>Agenda:<span className='templatevalue'>{this.state.display.agenda}</span></p>
+                                            <p className='templatelabel'>ParkingLot:<span className='templatevalue'>{this.state.display.parkingLot}</span></p>
+                                            
                                             <div>
                                             <p  className='templatelabel'>Select File:<input type='file' className='UploadImage1' name='docFile' id="docFile" onChange={this.fileUpload.bind(this)}></input><label for="docFile">Choose a file</label></p>
                                             <button onClick={this.submit.bind(this)} type="button" class="btn btn-outline-primary momtbtn4">Upload File</button>
@@ -255,11 +274,14 @@ view(e){
                                         <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}> Create Minutes Of Meeting</h1></u></center>
                                         <div className="container">
                                             <br></br><br></br>
-                                            <p className='templatelabel'>Action Point Reference:<input type='text' className='form-control tempinp' value={this.state.MOMs.ap} onChange={this.ap.bind(this)}></input></p>
-                                            <p className='templatelabel'>Objective:<input type='text' className='form-control tempinp' value={this.state.MOMs.objective} onChange={this.objective.bind(this)}></input></p>
-                                            <p className='templatelabel'>Duration(Minutes):<input type='text' className='form-control tempinp' value={this.state.MOMs.duration} onChange={this.duration.bind(this)}></input></p>
-                                            <p className='templatelabel'>Attendees:<input type='text' className='form-control tempinp' value={this.state.MOMs.pAttend} onChange={this.pAttend.bind(this)}></input></p>
-                                            <p className='templatelabel'>Agenda:<input type='text' className='form-control tempinp' value={this.state.MOMs.agenda} onChange={this.agenda.bind(this)}></input></p>
+                                            <p style={{display:'inline-block', width:'25em'}} className='templatelabel'>Action Point Reference:<input type='text' className='form-control tempinp' value={this.state.MOMs.ap} onChange={this.ap.bind(this)}></input></p>
+                                            <p style={{display:'inline-block', width:'25em', marginLeft:'2em'}} className='templatelabel'>Duration(Minutes):<input type='text' className='form-control tempinp' value={this.state.MOMs.duration} onChange={this.duration.bind(this)}></input></p>
+                                            <p className='templatelabel' style={{width:'52em'}}>Objective:<input type='text' className='form-control tempinp' value={this.state.MOMs.objective} onChange={this.objective.bind(this)}></input></p>
+                                            <p className='templatelabel' style={{width:'52em'}}>Attendees:<input type='text' className='form-control tempinp' value={this.state.MOMs.pAttend} onChange={this.pAttend.bind(this)}></input></p>
+                                            <p className='templatelabel' style={{width:'52em'}}>Next Date:<input type='text' className='form-control tempinp' value={this.state.MOMs.nextDate} onChange={this.nextDate.bind(this)}></input></p>
+                                            <p className='templatelabel' style={{display:'inline-block', width:'25em'}}>Agenda:<input type='text' className='form-control tempinp' value={this.state.MOMs.agenda} onChange={this.agenda.bind(this)}></input></p>
+                                            <p className='templatelabel' style={{display:'inline-block', width:'25em', marginLeft:'2em'}}>ParkingLot:<input type='text' className='form-control tempinp' value={this.state.MOMs.parkingLot} onChange={this.parkingLot.bind(this)}></input></p>
+                                            
                                             
                                             <button type="submit" onClick={this.createMOM.bind(this)} class="btn btn-outline-primary momtbtn8">Click To Create MOM</button>
                                             
