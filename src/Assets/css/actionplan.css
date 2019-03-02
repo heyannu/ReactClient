@@ -121,7 +121,6 @@ h3 {
     height: 0;
     box-shadow: 0 0 10px 1px black;
   } */
-<<<<<<< HEAD
 .btn-danger {
   margin: 0 auto;
 }
@@ -254,8 +253,8 @@ h4 {
 .row-col:hover {
   background-color: rgba(255, 255, 255, 0.7);
   /* box-shadow: 0px 0px 49px -3px #fff; */
-=======
-  .btn-danger{
+}
+.btn-danger{
       margin:0 auto; 
   }
   h2{
@@ -400,7 +399,6 @@ li{
 .row-col:hover{
     background-color:rgba(255, 255, 255, 0.7);
     /* box-shadow: 0px 0px 49px -3px #fff; */
->>>>>>> f8d11997e30133797b6e335929759d1cd17d5722
 }
 
 .UploadImage {
@@ -512,30 +510,29 @@ li{
 }
 
 .momtbtn1 {
-<<<<<<< HEAD
-  margin-top: 115px;
+  margin-top: 10em;
   margin-left: 660px;
 }
 
 .momtbtn2 {
+  margin-top: 10em;
+  margin-left: 4em;
+}
+
+
+/* .momtbtn2 {
   margin-top: 115px;
   margin-left: 30px;
-}
+} */
 
-.momtbtn3 {
+/* .momtbtn3 {
   margin-top: 240px;
   margin-left: 90px;
-}
+} */
 .momtbtn4 {
   margin-top: -8px;
-=======
-    margin-top: 10em;
+    /* margin-top: 10em; */
     margin-left: 40em;
-}
-
-.momtbtn2 {
-    margin-top: 10em;
-    margin-left: 4em;
 }
 
 .momtbtn3 {
@@ -548,7 +545,6 @@ li{
 .momtbtn8 {
   margin-top: 2em;
   margin-left: 40em;
->>>>>>> f8d11997e30133797b6e335929759d1cd17d5722
 }
 #color {
   color: #000;
