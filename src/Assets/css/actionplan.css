@@ -169,7 +169,7 @@ background-size: cover;
   }
   #ad{
       background-color: rgb(219, 239, 245);;
-      height: 1500px;
+      height: 35em;
       border-radius: 25px;
       border:1px solid brown;
       margin-top: 1%;
@@ -185,7 +185,7 @@ background-size: cover;
 }
   #ad2{
     background-color: rgb(219, 239, 245);
-    height: 1500px;
+    height: 35em;
     border-radius: 25px;
     margin-top: 1%;
     border: 1px solid brown;
