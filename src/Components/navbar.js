@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import jwt_decode from 'jwt-decode';
+import startup from '../Assets/images/startup.png';
 import Emblem from '../Assets/images/emblem.png';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
 export default class Nav extends Component {
@@ -54,6 +55,8 @@ export default class Nav extends Component {
           <nav className='navbar navbar-expand navA'>
             <img src={Emblem} alt='Emblem' />
             <p>Department Of Industrial Policy And Promotion</p>
+            <img style={{width:'12em', marginLeft:'55em'}} src={startup} alt='Emblem' />
+
           </nav>
         </div>
 

@@ -28,7 +28,7 @@ export default class Contact extends Component {
               </div>
             </div>
             <div className="col-lg-5 col-md-5" id="form">
-              <div id="contact">
+              <div id="contact1">
                 <div class="form-group" />
                 <div className="App">
                   <div>
