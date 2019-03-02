@@ -46,7 +46,7 @@ export default class Signin extends Component {
         console.log(this.state.User[0])
     }
     submit(e) {
-        if(e.key == 'Enter')
+        if(e.key == 'Enter'|| e.type == 'click')
         {
             e.preventDefault()
             fetch('http://localhost:5000/api/auth/signin',

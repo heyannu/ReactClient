@@ -96,36 +96,68 @@ export default class Signup extends Component {
         })
     }
 
-    show() {
+    
+
+    show(e) {
+      const {firstName, lastName, username, email, gender, uniqueId, password, department } = this.state.registerUser[0];
+      if(firstName==''|| firstName==" "){
+          alert('First name can\'t be blank');
+      }
+     else if(lastName==''|| lastName==" "){
+        alert('Last name can\'t be blank');
+        }
+    else if(username==''|| username==" "){
+        alert('Username can\'t be blank');
+    }
+    else if(email==''|| email==" "){
+        alert('Email can\'t be blank');
+    }
+    else if(gender==''|| gender==" "){
+        alert('gender name can\'t be blank');
+    }
+    else if(uniqueId==''|| uniqueId==" "){
+        alert('ID can\'t be blank');
+    }
+    else if(department==''|| department==" "){
+        alert('Department can\'t be blank');
+    }
+    else if ( password ==''|| password ==" "){
+        alert('Password can\'t be blank');
+    }
+    else if(e.key == 'Enter' || e.type == 'click'){
         this.setState({
-                open:true
+            open:true
+    })
+    console.log(e)
+    
+    fetch('http://localhost:5000/api/auth/signup',
+        {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                registerUser: this.state.registerUser[0]
+            }),
         })
-        fetch('http://localhost:5000/api/auth/signup',
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    registerUser: this.state.registerUser[0]
-                }),
+        .then((response) => response.json())
+        .then((responseJson) => {
+            console.log(responseJson);
+            this.setState({
+                success: responseJson.success,
+                message: responseJson.message,
+                open: false
+            }, () => {
+                console.log(this.state.success, this.state.message)
             })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                console.log(responseJson);
-                this.setState({
-                    success: responseJson.success,
-                    message: responseJson.message,
-                    open: false
-                }, () => {
-                    console.log(this.state.success, this.state.message)
-                })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-        console.log(this.state.registerUser, this.state.status)
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    console.log(this.state.registerUser, this.state.status)
+      }
+      
     }
     render() {
 
