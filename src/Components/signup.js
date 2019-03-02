@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import '../Assets/css/actionplan.css';
-import Nav from './navbar';
-import { BrowserRouter as Route,Redirect } from "react-router-dom";
+import Modal from 'react-responsive-modal';
+import { BrowserRouter as Route, Redirect } from "react-router-dom";
 export default class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            open: false,
             registerUser: [
                 {
                     firstName: "",
@@ -15,9 +16,9 @@ export default class Signup extends Component {
                     uniqueId: "",
                     password: "",
                     department: "",
-                    tier: "",
                     gender: '',
-                    proPic: ''
+                    proPic: '',
+                    redirect: true
                 }
             ],
             Confirmpassword: '',
@@ -48,10 +49,10 @@ export default class Signup extends Component {
         this.state.registerUser[0].gender = e.target.value;
         this.setState({
             registerUser: this.state.registerUser
-        },()=>{
-        console.log(this.state.registerUser[0].gender)
+        }, () => {
+            console.log(this.state.registerUser[0].gender)
         })
-        
+
     }
     password(e) {
         this.state.registerUser[0].password = e.target.value;
@@ -95,13 +96,10 @@ export default class Signup extends Component {
         })
     }
 
-    tier(e) {
-        this.state.registerUser[0].tier = e.target.value;
-        this.setState({
-            registerUser: this.state.registerUser
-        })
-    }
     show() {
+        this.setState({
+                open:true
+        })
         fetch('http://localhost:5000/api/auth/signup',
             {
                 method: 'POST',
@@ -118,8 +116,9 @@ export default class Signup extends Component {
                 console.log(responseJson);
                 this.setState({
                     success: responseJson.success,
-                    message: responseJson.message
-                }, ()=>{
+                    message: responseJson.message,
+                    open: false
+                }, () => {
                     console.log(this.state.success, this.state.message)
                 })
             })
@@ -129,14 +128,21 @@ export default class Signup extends Component {
         console.log(this.state.registerUser, this.state.status)
     }
     render() {
+
         const { success } = this.state;
-        if(success){
-            alert('You Are Successfully Registered. You May LogIn Now')
-            return <Redirect to = {{pathname:'/signin'}}/>
+        if (success == true) {
+            return <Redirect to={{ pathname: '/signin' }} />
         }
+
         return (
+
             <div>
-                {/* <Nav /> */}
+                
+        <Modal open={this.state.open} center>
+            <h2>You Are Successfully Registered. You May LogIn Now</h2>
+            <div className="modal-footer">
+            </div>
+        </Modal>
                 <div className="container" id="signup">
                     <center><h3 id='heading'>Signup</h3></center>
                     <div className="row">
@@ -157,11 +163,11 @@ export default class Signup extends Component {
                                 <label for="dept">Department</label>
                                 <input type="text" onChange={this.department.bind(this)} class="form-control" value={this.state.registerUser[0].department} id="dept" placeholder="Enter department" />
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="inputState">Gender</label>
                                 <select id="inputState" class="form-control" onChange={this.gender.bind(this)}>
-                                <option>select</option>
+                                    <option>select</option>
                                     <option value='Male' >Male</option>
                                     <option value='Female'>Female</option>
                                     <option value='Other'>Other</option>
@@ -186,12 +192,9 @@ export default class Signup extends Component {
                             </div>
                             <div class="form-group">
                                 <label for="id">ID</label>
-                                <input type="text" required class="form-control" onChange={this.id.bind(this)} value={this.state.registerUser[0].uniqueId} id="id" placeholder="Unique ID" />
+                                <input type="text" required class="form-control" onChange={this.id.bind(this)} onKeyPress={this.show.bind(this)} value={this.state.registerUser[0].uniqueId} id="id" placeholder="Unique ID" />
                             </div>
-                            <div class="form-group">
-                                <label for="tier">Tier</label>
-                                <input type="text" class="form-control" onChange={this.tier.bind(this)} value={this.state.registerUser[0].tier} onChange={this.tier.bind(this)} id="tier" placeholder="Enter Tier" />
-                            </div>
+
                         </div>
                         <button type="submit" class="btn btn-danger" onClick={this.show.bind(this)}>Submit</button>
                     </div>
