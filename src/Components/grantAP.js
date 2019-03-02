@@ -89,7 +89,7 @@ export default class GrantAp extends Component {
                         <div className="col-lg-3 col-md-4" id="ad">
                             <Template User={this.props.location.state.User} />
                         </div>
-                        <div className="col-lg-8 col-md-8" id="ad2">
+                        <div className="col-lg-8 col-md-8" id="ad5">
                             <div className="row">
                                 <div className='col-lg-4'><h2 style={{ marginTop: '1.4em' }}><span>{this.state.thissuser.username}</span></h2></div>
                                 <Link to={{
@@ -212,7 +212,7 @@ export default class GrantAp extends Component {
 
                                                     </div>
                                                 </div>
-                                                <button onClick={this.submit.bind(this)}>submit</button>
+                                                <button style={{marginTop:'1em'}} class="btn btn-outline-success" onClick={this.submit.bind(this)}>submit</button>
                                             </div>
                                         </div>
 

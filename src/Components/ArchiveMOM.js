@@ -242,7 +242,7 @@ view(e){
                                             <p className='templatelabel'>Attendees:<input type='text' className='form-control tempinp' value={this.state.MOMs.pAttend} onChange={this.pAttend.bind(this)}></input></p>
                                             <p className='templatelabel'>Agenda:<input type='text' className='form-control tempinp' value={this.state.MOMs.agenda} onChange={this.agenda.bind(this)}></input></p>
                                             
-                                            <button type="submit" onClick={this.createMOM.bind(this)} class="btn btn-outline-primary momtbtn1">Click To Create MOM</button>
+                                            <button type="submit" onClick={this.createMOM.bind(this)} class="btn btn-outline-primary momtbtn8">Click To Create MOM</button>
                                             
                                         </div>
                                     </div>

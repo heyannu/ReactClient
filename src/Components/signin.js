@@ -81,7 +81,7 @@ export default class Signin extends Component {
        render() {
         const { success, UserInfo  } = this.state;
         const token = localStorage.getItem('jwt-tok')
-        if(token && token.length > 0){
+        if(success){
             
             if(UserInfo.isAdmin){
                 alert('admin')

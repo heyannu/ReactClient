@@ -59,7 +59,7 @@ export default class Edituser extends Component {
             open: true
         })
         console.log(this.state)
-        fetch('http://localhost:5000/api/put/user/' + this.state.User._id,
+        fetch('http://localhost:5000/api/put/user/' + this.state.User.id,
             {
                 method: 'PUT',
                 headers: {
