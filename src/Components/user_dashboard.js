@@ -262,11 +262,11 @@ export default class UserDashboard extends Component {
                                                 <ul>
                                                     <li>
                                                         <div>
-                                                            <button class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <button style={{marginTop:'-7em'}} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <span>  {this.state.User.username}</span>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <Link to={{ pathname: '/admin_dashboard', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-user"></i><span>   Profile</span>  </button></Link>
+                                                                <Link to={{ pathname: '/user_dashboard', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-user"></i><span>   Profile</span>  </button></Link>
                                                                 <Link to={{ pathname: '/edituser', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-pen"></i><span>   Edit profile</span></button></Link>
                                                                 <a class="dropdown-item" href="/">Something else here</a>
                                                             </div>
@@ -276,12 +276,12 @@ export default class UserDashboard extends Component {
                                                 <ul>
                                                     <li>
                                                         <div class="dropdown">
-                                                            <button class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <button style={{marginTop:'-7em', marginRight:'8em'}} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <span>Action Plans</span>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                                 {this.state.myplans.map((single) => (
-                                                                    <a class="dropdown-item" ><span>{single.plan}</span></a>
+                                                                    <a class="dropdown-item" onClick={this.findap.bind(this, single)}><span>{single.plan}</span></a>
                                                                 ))}
 
                                                             </div>
@@ -363,7 +363,7 @@ export default class UserDashboard extends Component {
                             <div style={{ display: this.state.show }}>
                                 <div style={{ marginTop: '8em', height: '25em' }}>
                                     <div className='row' id='title'>
-                                        <center><p className='templatelabel'> Ap Name:<span className='templatevalue'>{this.state.ap.apNo}</span></p></center>
+                                        {/* <center><p className='templatelabel'> Ap Name:<span className='templatevalue'>{this.state.ap.apNo}</span></p></center> */}
 
 
                                         {/* <p className='templatelabel'> Disbursed Fund:<span className='templatevalue'>{this.state.disbursed}</span></p>
