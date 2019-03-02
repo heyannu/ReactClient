@@ -1,5 +1,6 @@
 .row {
   margin-left: 0%;
+  margin-bottom: 0%;
 }
 .emblem {
   margin-left: 5%;
@@ -8,7 +9,7 @@
 #links {
   margin: 0%;
   text-align: left;
-  background-color: rgba(121, 101, 230, 0.8);
+  background-color: black;
   color: white;
   border-radius: 0;
   padding-left: 0;
@@ -24,11 +25,11 @@
   border: 1px solid #264b64;
   height: 185px;
   width: 180px;
-  background-color: #c6dff0;
+  background-color: #fff;
   transition: 0.8s;
 }
 body {
-  background-color: #c6dff0;
+  background-color: #fff;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -44,7 +45,7 @@ body {
   width: 100%;
   height: 65%;
   /* background-color: #e46e6e ; */
-  background-color: #c6dff0;
+  background-color: #fff;
 }
 /* .card{
     width:95%;
@@ -827,7 +828,7 @@ textarea {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgb(111, 96, 196);
+  background: grey;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
   -webkit-transform-origin: 0 50%;
