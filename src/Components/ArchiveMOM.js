@@ -188,7 +188,26 @@ view(e){
             .catch((error) => {
                 console.error(error);
             });
-    }
+            window.location.reload();
+          }
+
+  componentDidMount() {
+    fetch("http://localhost:5000/api/minutes/minutesData")
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState(
+          {
+            MOMS: responseJson.amom
+          },
+          () => {
+            console.log(this.state.MOMS);
+          }
+        );
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
     render() {
         const moms = this.state.MOMS.map((mom, i) =>

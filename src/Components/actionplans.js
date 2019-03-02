@@ -189,7 +189,7 @@ export default class ActionPlan extends Component {
           <div className="row" style={{ height: "550px" }}>
             <div id="links" className="col-lg-3 col-md-6">
               <center>
-                <h4 style={{ color: "black" }}>Latest Updates </h4>
+                <h4 style={{ color: "white" }}>Latest Updates </h4>
               </center>
               <div>
                 <ul>{sswen10}</ul>
