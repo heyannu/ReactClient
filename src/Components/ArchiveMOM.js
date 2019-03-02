@@ -154,7 +154,7 @@ view(e){
     }
     create(e) {
         this.setState({
-            isForm: true
+            isForm: !this.state.isForm
         })
     }
     createMOM(e) {
@@ -231,27 +231,28 @@ view(e){
 
         return (
             <div>
-                <div>
-                    <div className="row" style={{ height: "550px" }}>
+                <div style={{ height:'45em' }}>
+                    <div className="row" style={{ height:'45em' }}>
                         <div id="links" className="col-lg-3 col-md-6">
-                            <center><h4 style={{ fontFamily: 'Roboto', color: 'black', textDecoration: 'underline', fontSize: '35px' }}>Archive</h4></center>
+                            <center><h4 style={{ fontFamily: 'Roboto', color: 'white', textDecoration: 'underline', fontSize: '35px' }}>Archive</h4></center>
                             <div>
-                                <ul className='momul'><br></br>
+                                <ul className='momul' style={{height:'35em'}}><br></br>
                                     {moms}
                                 </ul>
                                 <button onClick={this.create.bind(this)} type="button" class="btn btn-outline-success momtbtn3" style={{ display: !this.state.isForm ? 'inline' : 'none' }}>Create MOM</button>
+                                <button onClick={this.create.bind(this)} type="button" class="btn btn-outline-success momtbtn3" style={{ display: this.state.isForm ? 'inline' : 'none', width:'6em' }}>Back</button>
                             </div>
                         </div>
                         {
                             !this.state.isForm ?
                                 (
-                                    <div id="plans" className="col-lg-8 col-md-8" style={{ border: '1px solid brown', borderRadius: '1em' }}>
+                                    <div id="plans" className="col-lg-8 col-md-8" style={{ height:'42em' }} >
                                         <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}>Minutes Of Meeting</h1></u></center>
                                         <div className="container" style={{ display: this.state.isDisplay1   ? 'inline' : 'none' }}>
                                             <br></br><br></br>
                                             <p style={{display:'inline-block', width:'25em'}} className='templatelabel'>Date:<span className='templatevalue'>{this.state.display.createdOn}</span></p>
                                             <p style={{display:'inline-block', width:'25em', marginLeft:'2em'}} className='templatelabel'>Next Date:<span className='templatevalue'>{this.state.display.nextDate}</span></p>
-                                            <p className='templatelabel'>ActionPoint Ref:<span className='templatevalue'>{this.state.display.ap}</span></p>
+                                            <p className='templatelabel'>AP Ref:<span className='templatevalue'>{this.state.display.ap}</span></p>
                                             <p className='templatelabel'>Objective:<span className='templatevalue'>{this.state.display.objective}</span></p>
                                             <p className='templatelabel'>Duration:<span className='templatevalue'>{this.state.display.duration}</span></p>
                                             <p className='templatelabel'>Attendees:<span className='templatevalue'>{this.state.display.pAttend}</span></p>
@@ -270,7 +271,7 @@ view(e){
                                 )
                                 :
                                 (
-                                    <div id="plans" className="col-lg-8 col-md-8" style={{ border: '1px solid brown', borderRadius: '1em' }}>
+                                    <div id="plans" className="col-lg-8 col-md-8" style={{ height:'42em' }}>
                                         <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}> Create Minutes Of Meeting</h1></u></center>
                                         <div className="container">
                                             <br></br><br></br>
@@ -291,7 +292,7 @@ view(e){
                         }
                     </div>
                 </div>
-                <div style={{marginTop:'160px'}}>
+                <div>
                 <Footer />
                 </div>
             </div>

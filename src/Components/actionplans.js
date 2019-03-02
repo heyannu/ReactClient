@@ -704,7 +704,7 @@ export default class ActionPlan extends Component {
             </div>
           </div>
         </div>
-        <div style={{ marginTop: "860px" }}>
+        <div>
           <Footer />
         </div>
       </div>
