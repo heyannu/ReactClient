@@ -7,7 +7,6 @@
 }
 #links
 {
-padding: 3%;
 border: 1px solid brown;
 margin: 1%;
 }
@@ -218,7 +217,9 @@ li{
 }
   h4{
       color: #fff;
-      font-family: Righteous;
+      font-family: Roboto;
+      text-decoration: underline;
+      overflow: auto
   }
   #btn-outline-warning{
       float: right;
@@ -421,7 +422,7 @@ li{
   height: 530px;
 }
 
-#contact {
+#contact1 {
   margin-top: 1%;
   background-color: rgba(0, 0, 0, 0.6);
   padding: 1% 8%;
@@ -429,7 +430,7 @@ li{
   height: 520px;
   width: 405px;
   border-radius: 25px;
-  box-shadow: 0px 10px 10px 10px #fff;
+  box-shadow: 5px 2px #fff;
 }
 .App {
   max-width: 420px;
