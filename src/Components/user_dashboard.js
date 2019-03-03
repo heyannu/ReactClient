@@ -276,7 +276,7 @@ export default class UserDashboard extends Component {
                                                 <ul>
                                                     <li>
                                                         <div class="dropdown">
-                                                            <button style={{marginTop:'-7em', marginRight:'8em'}} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <button style={{marginTop:'-7em', marginRight:'14em'}} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <span>Action Plans</span>
                                                             </button>
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
