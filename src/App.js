@@ -16,6 +16,8 @@ import Archive from './Components/ArchiveMOM'
 import Reroute from './Components/reroute';
 import{ BrowserRouter as Router,Route, Redirect } from "react-router-dom";
 import About from './Components/about';
+import Target from './Components/target'
+
 // import UserAccess from './Components/userAccess';
 class App extends Component {
   render() {
@@ -38,6 +40,7 @@ class App extends Component {
       <Route exact path="/user_access" component={UserAccess}/>
       <Route exact path="/verify/:userId" component={VerifyUser}/>
       <Route exact path="/contact" component={Contact}/>
+      <Route exact path='/target' component={Target}/>
       </div>
       </Router>
     )
