@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Template from './template';
 // import dp from '../Assets/images/user.png'
 import '../Assets/css/actionplan.css';
-import { BrowserRouter as Route, Link } from "react-router-dom";
+import { BrowserRouter as Route, Link,Redirect } from "react-router-dom";
 
 export default class Target extends Component {
     constructor(props) {
@@ -43,7 +43,9 @@ export default class Target extends Component {
                 { id: 18, plan: ' Launching of Innovation Focused Programs for Students ' },
                 { id: 19, plan: ' Annual Incubator Grand Challenge ' }
             ],
-            topic: ''
+            topics: ['discussion', 'meeting','funding', 'investing'],
+            topic:'',
+            redirect:false
         }
     }
     componentDidMount() {
@@ -86,7 +88,7 @@ export default class Target extends Component {
         })
     }
     submit() {
-        console.log(this.state.duration, this.state.targets)
+        console.log(this.state.app)
         for (var i = 0; i < this.state.app.length; i++) {
             fetch('http://localhost:5000/api/target/newTarget/' + this.state.app[i],
                 {
@@ -99,12 +101,13 @@ export default class Target extends Component {
                         objective: this.state.targets,
                         duration: this.state.duration,
                         apNo: this.state.app,
-                        topic: this.state.topic
+                        topic: this.state.topic,
+                        redirect:true
                     }),
                 })
                 .then((response) => response.json())
                 .then((responseJson) => {
-
+                    
                 })
                 .catch((error) => {
                     console.error(error);
@@ -119,15 +122,17 @@ export default class Target extends Component {
             app: this.state.app
         })
     }
-    topic(e) {
+    topic(p,e) {
         this.setState({
-            topic: e.target.value
+            topic: p
         })
     }
     goback() {
         this.setState({ showtarget: 'inline', showduration: 'none', targets: [] })
     }
     render() {
+        if(this.state.redirect==true)
+        return<Redirect to ={{pathname:'/actionplan'}}/>
         return (
             <div>
                 <div className="container" id="admindashboard">
@@ -160,6 +165,23 @@ export default class Target extends Component {
                                         </div>
                                     </li>
                                 </ul>
+                                <ul>
+                                    <li>
+                                        <div class="dropdown">
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span>Topics</span>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    {this.state.topics.map((single) => (
+                                                        <a class="dropdown-item" onClick={this.topic.bind(this, single)}><span>{single}</span></a>
+                                                    ))}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                                 
                                 <div className='col-lg-6' id='target'>
 
@@ -169,11 +191,12 @@ export default class Target extends Component {
                                         {this.state.pap.map((i) => (
                                             <li style={{ listStyle: "square" }}>{i}</li>
                                         ))}
-                                        <div class="form-group" style={{ marginTop: '3em' }}>
+                                    
+                                        <div class="form-group" style={{ display: this.state.showtarget }}>
                                             <label for="id">Topic</label>
                                             <input type="text" class="form-control"
-                                                onChange={this.topic.bind(this)}
-                                                placeholder="Enter Topic" />
+                                                value={this.state.topic}
+                                                placeholder="select topic" />
                                         </div>
                                         <div class="form-group" style={{ display: this.state.showtarget }}>
                                             <label for="id">Target</label>
