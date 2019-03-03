@@ -16,6 +16,9 @@ export default class AdminDashboard extends Component {
                 ad: 0,
                 apNo: 0
             }],
+            targets: [],
+            target: '',
+            duration: 0,
             incub: [{
                 noi: '',
                 ai: 0,
@@ -202,6 +205,15 @@ export default class AdminDashboard extends Component {
                                         }}>
                                             <button class="btn btn-outline-info" type="button" style={{ width: '10em', marginTop: '2.0em' }}>
                                                 <span>Grant Access</span>
+                                            </button></Link>
+                                            <Link to={{
+                                            pathname: '/target',
+                                            state: {
+                                                User: this.props.location.state.User
+                                            }
+                                        }}>
+                                            <button class="btn btn-outline-info" type="button" style={{ width: '10em', marginTop: '2.0em' }}>
+                                                <span>Targets</span>
                                             </button></Link>
                                     </li>
                                 </ul>
