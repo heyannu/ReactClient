@@ -6,6 +6,7 @@ import ActionPlan from './Components/actionplans';
 import UserDashboard from './Components/user_dashboard';
 import AdminDashboard from './Components/adminDashboard';
 import Nav from './Components/navbar';
+import Status from './Components/status';
 import Contact from './Components/contact'
 import UserAccess from './Components/userAccess';
 import Edituser from './Components/editUser';
@@ -28,6 +29,7 @@ class App extends Component {
       <Route exact path='/actionplan' component={ActionPlan}/> 
       <Route exact path='/archive' component={Archive}/> 
       <Route exact path='/about' component={About}/> 
+      <Route exact path='/status' component={Status}/> 
       <Route exact path="/user_dashboard" component={UserDashboard}/>
       <Route exact path="/admin_dashboard" component={AdminDashboard}/>
       <Route exact path="/grant_ap" component={GrantAp}/>

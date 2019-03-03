@@ -72,6 +72,9 @@ export default class Nav extends Component {
               <Link style={{display:this.state.login}} className='nav-link' to='/archive'><button type="button" style={{marginTop:'8.5px'}} className="btn btn-outline-light nabtn">Archive</button></Link>
             </li>
             <li>
+              <Link style={{display:this.state.login}} className='nav-link' to='/status'><button type="button" style={{marginTop:'8.5px'}} className="btn btn-outline-light nabtn">Status</button></Link>
+            </li>
+            <li>
               <Link className='nav-link' to='/about'><button type="button" className="btn btn-outline-light nabtn">About</button></Link>
             </li>
             <li>

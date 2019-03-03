@@ -509,6 +509,9 @@ h4 {
 
 .MOMLi {
   font-weight: 500;
+  width: 100%;
+  padding: 2%;
+  height:45px;
 }
 
 .MOMLi:hover {

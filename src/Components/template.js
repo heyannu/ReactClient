@@ -46,8 +46,9 @@ export default class Template extends Component {
         this.state.displayButton = !this.state.displayButton;
         const formData = new FormData();
         formData.append('myimage', this.state.file);
-        const { id } = this.state.User;
-        fetch('http://localhost:5000/api/' + id + "/upload",
+        const { _id } = this.state.User;
+        console.log(this.state.User)
+        fetch('http://localhost:5000/api/' + _id + "/upload",
             {
                 method: 'POST',
                 headers: {
