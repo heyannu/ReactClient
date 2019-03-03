@@ -226,7 +226,7 @@ view(e){
 
     render() {
         const moms = this.state.MOMS.map((mom, i) =>
-            <li className='MOMLi' onClick={this.click.bind(this)} key={mom._id}><span style={{ display: 'inline' }}> {i + 1}. </span>{mom.objective}</li>
+            <li className='MOMLi hvr-sweep-to-right' onClick={this.click.bind(this)} key={mom._id}><span style={{ display: 'inline' }}> {i + 1}. </span>{mom.objective}</li>
         );
 
         return (
