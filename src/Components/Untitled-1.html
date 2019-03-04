@@ -1,0 +1,196 @@
+
+                        let x = this.state.response.ap.benef.length;
+                        let d = new Date(Date.now());
+                        let nw = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                        let rm = []; let a = []; let rd = [];let s=[];
+                        for (let i = 0; i < x; i++) {
+                            a = this.state.response.ap.benef[i].createdOn;
+                            let aa = new Date(a);
+                            
+                            rm[i] = nw.getMonth() - aa.getMonth();
+                           
+                            rd[i] = Math.abs(nw.getDay() - aa.getDay());
+                            console.log('RM',rm);
+                            console.log('RD',rd);
+                           
+
+                        }
+                       
+                        for (let i = 0; i < x; i++) {
+                            if (rm[i] <= 1 && rm[i] >= 0) {
+                                if (rd[i] < 5 && rd[i] >= 0) {
+                                    s[i]=s[i]+this.state.response.ap.benef[i].ad;
+                                    
+                                }
+                               else if (rd[i] < 10 && rd[i] >= 5) {
+                                s[i]=s[i]+this.state.response.ap.benef[i].ad;
+                                    
+                                    
+
+                                } else if (rd[i] < 15 && rd[i] >= 10) {
+                                    s[i]=s[i]+this.state.response.ap.benef[i].ad;
+                                    
+                                   
+
+                                }else  if (rd[i] < 20 && rd[i] >= 15) {
+                                    s[i]=s[i]+this.state.response.ap.benef[i].ad;
+                                
+                                    
+                                } else if (rd[i] < 25 && rd[i] >= 20) {
+                                    s[i]=s[i]+this.state.response.ap.benef[i].ad;
+                                    
+                                    
+
+                                }else  if (rd[i] <= 30 && rd[i] >= 25) {
+                                    s[i]=s[i]+this.state.response.ap.benef[i].ad;
+                                    
+                                                                   
+                                }
+                            }
+                        }
+
+                       console.log(s[0]);
+                       console.log(s[1]);
+                       console.log(s[2]);
+                       console.log(s[3]);
+                       console.log(s[4]);
+                       console.log(s[5]);
+
+                        var data = [];
+                        data.push(s[0]);
+                        data.push(s[1]);
+                        data.push(s[2]);
+                        data.push(s[3]);
+                        data.push(s[4]);
+                        data.push(s[5]);
+console.log('Data',data);
+
+                        var width = 500;
+                        var height = 600;
+                        var margin = {
+                            top: 45,
+                            left: 45,
+                            right: 45,
+                            bottom: 45
+                        };
+                        var svg = d3.select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+    
+
+    
+    var xScale = d3.scaleBand()
+    .domain(["5", "10", "15", "20", "25", "30"])
+    .rangeRound([margin.left, width - margin.right])
+    .padding(.5);
+    
+    var yScale = d3.scaleLinear()
+    .domain([0,100])
+    .range([height - margin.bottom, margin.top]);
+    
+    var xAxis = svg.append("g")
+    .attr("transform", `translate(0, ${height-margin.top})`)
+    .call(d3.axisBottom().scale(xScale));
+    
+    var yAxis = svg.append("g")
+                   .attr("transform",`translate(${margin.left},0)`)
+                   .call(d3.axisLeft().scale(yScale));
+    var bar = svg.selectAll("rect")
+                 .data(data)
+                 .enter()
+                 .append("rect")
+                    .attr("x", function(d, i){
+                       return xScale((i + 1) * 5);
+                    })
+                    .attr("y", function(d){return yScale(d);})
+                    .attr("width", xScale.bandwidth())
+                    .attr("height", function(d){
+                      return height - margin.bottom - yScale(d);})
+                    .attr("fill", "black")
+                    .on("mouseover", function(){
+                      d3.select(this)
+                        .transition()
+                        .duration(500)
+                        .attr("fill", "blue")
+                    })
+                    .on("mouseout", function(){
+                      d3.select(this)
+                        .transition()
+                        .duration(500)
+                        .attr("fill", "black")
+                    });
+      svg.append('text')
+    .attr('x', -(height / 2) - margin.left)
+    .attr('y', margin.right / 2.4)
+    .attr('transform', 'rotate(-90)')
+    .attr('text-anchor', 'middle')
+    .text('start-ups involved')
+
+      svg.append('text')
+    .attr('x', width / 2 + margin.bottom)
+    .attr('y', 580)
+    .attr('text-anchor', 'middle')
+    .text('no. of days')
+
+      svg.selectAll("text")
+               .data(data)
+               .enter()
+               .append("text")
+               .text(function(d) {
+                    for(var i = 0; i < data.length; i++){
+                        return data[i];
+                    }
+
+
+
+
+
+                    {
+                        this.state.isForm ?
+                            (   
+                                <div id="plans" className="col-lg-8 col-md-8" style={{ height:'42em' }}>
+                                <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}> Create Minutes Of Meeting</h1></u></center>
+                                <div className="container">
+                                    <br></br><br></br>
+                                    <p style={{display:'inline-block', width:'25em'}} className='templatelabel'>Action Point Reference:<input type='text' className='form-control tempinp' value={this.state.MOMs.ap} onChange={this.ap.bind(this)}></input></p>
+                                    <p style={{display:'inline-block', width:'25em', marginLeft:'2em'}} className='templatelabel'>Duration(Minutes):<input type='text' className='form-control tempinp' value={this.state.MOMs.duration} onChange={this.duration.bind(this)}></input></p>
+                                    <p className='templatelabel' style={{width:'52em'}}>Objective:<input type='text' className='form-control tempinp' value={this.state.MOMs.objective} onChange={this.objective.bind(this)}></input></p>
+                                    <p className='templatelabel' style={{width:'52em'}}>Attendees:<input type='text' className='form-control tempinp' value={this.state.MOMs.pAttend} onChange={this.pAttend.bind(this)}></input></p>
+                                    <p className='templatelabel' style={{width:'52em'}}>Next Date:<input type='text' className='form-control tempinp' value={this.state.MOMs.nextDate} onChange={this.nextDate.bind(this)}></input></p>
+                                    <p className='templatelabel' style={{display:'inline-block', width:'25em'}}>Agenda:<input type='text' className='form-control tempinp' value={this.state.MOMs.agenda} onChange={this.agenda.bind(this)}></input></p>
+                                    <p className='templatelabel' style={{display:'inline-block', width:'25em', marginLeft:'2em'}}>ParkingLot:<input type='text' className='form-control tempinp' value={this.state.MOMs.parkingLot} onChange={this.parkingLot.bind(this)}></input></p>
+                                    
+                                    
+                                    <button type="submit" onClick={this.createMOM.bind(this)} class="btn btn-outline-primary momtbtn8">Click To Create MOM</button>
+                                    
+                                </div>
+                            </div>
+                                
+                            )
+                            :
+                            (
+                                <div id="plans" className="col-lg-8 col-md-8" style={{ height:'42em' }} >
+                                <center><u><h1 style={{ fontFamily: 'Roboto', fontSize: '50px' }}>Minutes Of Meeting</h1></u></center>
+                                <div className="container" style={{ display: this.state.isDisplay1   ? 'inline' : 'none' }}>
+                                    <br></br><br></br>
+                                    <p style={{display:'inline-block', width:'25em'}} className='templatelabel'>Date:<span className='templatevalue'>{this.state.display.createdOn}</span></p>
+                                    <p style={{display:'inline-block', width:'25em', marginLeft:'2em'}} className='templatelabel'>Next Date:<span className='templatevalue'>{this.state.display.nextDate}</span></p>
+                                    <p className='templatelabel'>AP Ref:<span className='templatevalue'>{this.state.display.ap}</span></p>
+                                    <p className='templatelabel'>Objective:<span className='templatevalue'>{this.state.display.objective}</span></p>
+                                    <p className='templatelabel'>Duration:<span className='templatevalue'>{this.state.display.duration}</span></p>
+                                    <p className='templatelabel'>Attendees:<span className='templatevalue'>{this.state.display.pAttend}</span></p>
+                                    <p className='templatelabel'>Agenda:<span className='templatevalue'>{this.state.display.agenda}</span></p>
+                                    <p className='templatelabel'>ParkingLot:<span className='templatevalue'>{this.state.display.parkingLot}</span></p>
+                                    
+                                    <div>
+                                    <p  className='templatelabel'>Select File:<input type='file' className='UploadImage1' name='docFile' id="docFile" onChange={this.fileUpload.bind(this)}></input><label for="docFile">Choose a file</label></p>
+                                    <button onClick={this.submit.bind(this)} type="button" class="btn btn-outline-primary momtbtn4">Upload File</button>
+                                    </div>
+
+                                    <button onClick={this.delete.bind(this)} type="button" class="btn btn-outline-danger momtbtn1" style={{ display: this.state.isDisplay ? 'inline' : 'none' }}>Delete MOM</button>
+                                   <button onClick={this.view.bind(this)} type="button" class="btn btn-outline-warning momtbtn2" style={{ display: this.state.isDisplay ? 'inline' : 'none' }}>View File</button>
+                                </div>
+                            </div>  
+                            )
+                    }
