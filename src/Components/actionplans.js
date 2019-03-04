@@ -145,14 +145,23 @@ export default class ActionPlan extends Component {
   show() {
     this.setState({
       showPlans: "block",
-      ap: "none"
+      ap: "none",
+      nottopic: 'inline', 
+      ap: 'none',
+      showtopic: 'none',
+      hidebutton: 'inline',
+      showbutton: 'none',
+      topic:''
+  
     });
+
+    
   }
   findPlan(planNo, e) {
     this.setState({
       showPlans: "none",
-      showtopic:'none',
-      nottopic:'none',
+      showtopic: 'none',
+    
       ap: "block",
       open: true
     });
@@ -185,6 +194,7 @@ export default class ActionPlan extends Component {
         // for (var i = 0; i < this.state.targets.ap.target.objective.length; i++) {
         var p = this.state.targets.ap.target[0].objective;
         this.state.response.push(p)
+        console.log(this.state.response)
         // }
         // }
         var n = this.state.selectedPlan.apNo
@@ -805,25 +815,12 @@ export default class ActionPlan extends Component {
                   </div>
                 </div>
               </div>
-              <div style={{ display: this.state.ap }}>
-                <div className="container" z>
+              <div>
+                <div className="container" style={{ display: this.state.ap }}>
                   <br />
                   <br />
-                  <div className="row">
-                    <div className="col-lg-9">
-
-                    </div>
-                    <div className="col-lg-3" >
-                      <button
-                        className="btn btn-outline-dark"
-                        onClick={this.show.bind(this)}
-                      >
-                        Go back
-                      </button>
-                    </div>
-                  </div>
-
-                  <p className="templatelabel">
+                 
+                  <div style={{display:this.state.nottopic}}><p className="templatelabel">
                     {" "}
                     Apno:
                     <span className="templatevalue">
@@ -845,60 +842,77 @@ export default class ActionPlan extends Component {
                     </span>
                   </p>
                   <p className="templatelabel">
-                    
+
                     Number Of Startups:{" "}
                     <span className="templatevalue">{beneflen}</span>
                   </p>
                   <p className="templatelabel">
-                    
+
                     Number Of Incubators:{" "}
                     <span className="templatevalue">{incubelen}</span>
                   </p>
                   <p className="templatelabel" id="beninc">
-                    
+
                     Beneficiaries:{" "}
                     <span className="templatevalue">{benefs}</span>
                   </p>
                   <p className="templatelabel" id="beninc">
-                    {incubs}
+
                     Incubators: <span className="templatevalue">{incubs}</span>
                   </p>
-                  {(this.state.get) ?
-                    <div> {/* {this.state.response.map((i)=>( */}
-                      <p onClick={this.topicshow.bind(this)} className='templatelabel' style={{display:this.state.nottopic}}id='beninc'> Topic: <span className='templatevalue'>{this.state.topic}</span></p>
-                      {/* ))} */}
-                      <div style={{ display: this.state.showtopic }}>
-                        <div className='container'>
-                          <br></br><br></br>
-                    
-                           {/* <h2 id='color' style={{ marginTop: '0.7em' }}>{this.state.topic}</h2> */}
-                          
-                          <div className="col-lg-3"><button className='btn btn-outline-dark' onClick={this.show.bind(this)}>Go back</button></div>
-                          <h2 style={{ color: '#000' }}>{this.state.topic}</h2>
-                          {this.state.response.map((fi, b) => (
-                            <li className='templatelabel'>{b + 1}.<span className='templatevalue'>{fi}</span></li>
-                          ))}
-                          <p className='templatelabel' id='beninc'> Duration: <span className='templatevalue'>{this.state.duration}</span></p>
-                          <p className='templatelabel' id='beninc'> Status: <span style={{ color: this.state.color }} className='templatevalue'>{this.state.status}</span></p>
-                          <p className='templatelabel' id='beninc'> Start Date: <span className='templatevalue'>{this.state.specDate}</span></p>
-                          <p className='templatelabel' id='beninc'> Expected End Date: <span className='templatevalue'>{this.state.createdDate}</span></p>
+                  <p className="templatelabel" id="beninc">
+                    <p onClick={this.topicshow.bind(this)} className='templatelabel' id='beninc'> Topic: <span className='templatevalue'>{this.state.topic}</span></p>
+                 
+                  </p>
+</div>
+                  {
+                    (this.state.get) ?
+                      <div>
+                        <div style={{ display: this.state.showtopic }}>
+                          <div className='container'>
+                            <br></br><br></br>
+
+                            {/* <h2 id='color' style={{ marginTop: '0.7em' }}>{this.state.topic}</h2> */}
+
+                            
+                            <h2 style={{ color: '#000' }}>{this.state.topic}</h2>
+                            {this.state.response.map((fi, b) => (
+                              <li className='templatelabel'>{b + 1}.<span className='templatevalue'>{fi}</span></li>
+                            ))}
+                            <p className='templatelabel' id='beninc'> Duration: <span className='templatevalue'>{this.state.duration}</span></p>
+                            <p className='templatelabel' id='beninc'> Status: <span style={{ color: this.state.color }} className='templatevalue'>{this.state.status}</span></p>
+                            <p className='templatelabel' id='beninc'> Start Date: <span className='templatevalue'>{this.state.specDate}</span></p>
+                            <p className='templatelabel' id='beninc'> Expected End Date: <span className='templatevalue'>{this.state.createdDate}</span></p>
+                          </div>
+                          <div class="form-group" style={{ display: this.state.showbutton }}>
+                            <label for="id">Reason for delay </label>
+                            <input type="text" class="form-control"
+                              onChange={this.reason.bind(this)}
+                              placeholder="Enter delay reason" />
+                          </div>
+                          <button style={{ display: this.state.hidebutton }} onClick={this.confirm.bind(this)}>Confirm</button>
+                          <button style={{ display: this.state.showbutton }} onClick={this.submitdelay.bind(this)}>Delay</button>
                         </div>
-                        <div class="form-group" style={{ display: this.state.showbutton }}>
-                          <label for="id">Reason for delay </label>
-                          <input type="text" class="form-control"
-                            onChange={this.reason.bind(this)}
-                            placeholder="Enter delay reason" />
-                        </div>
-                        <button style={{ display: this.state.hidebutton }} onClick={this.confirm.bind(this)}>Confirm</button>
-                        <button style={{ display: this.state.showbutton }} onClick={this.submitdelay.bind(this)}>Delay</button>
+                      </div> :
+                      <div>
+                        
                       </div>
-                    </div> :
-                    <div></div>
                   }
                 </div>
+                <div className="row">
+                  
+                  <div className="col-lg-3" >
+                    <button
+                      className="btn btn-outline-dark"
+                      onClick={this.show.bind(this)}
+                    >
+                      Go back
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
-
           </div>
           <Footer />
         </div>
