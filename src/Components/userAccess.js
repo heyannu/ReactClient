@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Route, Link, Redirect } from "react-router-dom";
 import Template from './template';
 import '../Assets/css/actionplan.css';
+import jwt_decode from 'jwt-decode';
 import Modal from 'react-responsive-modal';
 import SyncLoader from 'react-spinners/SyncLoader';
 
@@ -9,17 +10,26 @@ export default class UserAccess extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: this.props.location.state.User,
+            User: [],
             allusers: [],
             Users: [],
             sendUser: [],
             redirect: false,
             open: true,
-            loading:true
+            loading:true,
+            logged: false
         }
     }
     componentDidMount() {
-        console.log(this.props.location.state.User)
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true
+            })
+        }
         fetch('http://localhost:5000/api/userData',
             {
                 method: 'POST',
@@ -63,15 +73,22 @@ export default class UserAccess extends Component {
 
     }
     render() {
-        if (this.state.redirect) {
+        if (this.state.redirect == true) {
             return <Redirect to={{
                 pathname: '/grant_ap',
                 state: {
-                    selectedUser: this.state.sendUser,
-                    User: this.props.location.state.User
+                    selectedUser: this.state.sendUser
                 }
-            }}></Redirect>
+            }} />
         }
+        else if (this.state.logged == false) {
+            return (
+                <div>
+                <center><h1>You need to login to continue!</h1></center>
+            </div>
+            )
+        }
+        else 
         return (
             <div>
                 <div className="container" id="admindashboard">
@@ -92,17 +109,14 @@ export default class UserAccess extends Component {
                     </Modal>
                     <div className="row">
                         <div className="col-lg-3 col-md-4" id="ad">
-                            <Template User={this.props.location.state.User} />
+                            <Template />
                         </div>
                         <div className="col-lg-8 col-md-8" id="ad2">
                             <div className="container">
                                 <div className="row">
                                     <div className='col-lg-4' style={{ marginTop: '1.5em' }}><h2>Users</h2></div>
                                     <Link to={{
-                                        pathname: "/admin_dashboard",
-                                        state: {
-                                            User: this.props.location.state.User
-                                        }
+                                        pathname: "/admin_dashboard"
                                     }}><div className="col-lg-8"><button className="btn btn-outline-dark" style={{ marginTop: '1.5em', width: '8em', float: 'right' }}>Go Back</button></div></Link>
                                 </div>
                                 <hr />

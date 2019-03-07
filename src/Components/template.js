@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
 import '../Assets/css/actionplan.css';
+import jwt_decode from 'jwt-decode';
 export default class Template extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            User: this.props.User,
+            User:[],
             description: 'Add your bio!',
             display: 'block',
             file: null,
             displayButton: true,
             displayForm: false,
             show: 'none',
+            logged:false,
         }
     }
     componentDidMount(){
-        console.log(this.props.User)
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+            })
+        }
     }
     change(e) {
         this.state.file = e.target.files[0];
@@ -76,6 +86,13 @@ export default class Template extends Component {
     }
 
     render() {
+        if (this.state.logged == false) {
+            return (
+                <div>
+                <center><h1>You need to login to continue!</h1></center>
+            </div>
+            )
+        }
         return (
             <div>
                 <div>

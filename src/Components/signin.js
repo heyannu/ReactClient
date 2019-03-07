@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../Assets/css/actionplan.css';
-import { BrowserRouter as Route,Redirect } from "react-router-dom";
-
+import { BrowserRouter as Route, Redirect } from "react-router-dom";
 export default class Signin extends Component {
     constructor(props) {
         super(props);
@@ -12,8 +11,9 @@ export default class Signin extends Component {
                     password: ""
                 }
             ],
+            logged: true,
             value: true,
-            UserInfo:[],
+            UserInfo: [],
             type: "password",
             success: false,
             message: ''
@@ -24,6 +24,14 @@ export default class Signin extends Component {
         this.setState({
             User: this.state.User
         })
+    }
+    componentWillMount() {
+        const token = localStorage.getItem('jwt-tok');
+        if (token == null) {
+            this.setState({
+                logged: false
+            })
+        }
     }
     password(e) {
         this.state.User[0].password = e.target.value;
@@ -46,8 +54,7 @@ export default class Signin extends Component {
         console.log(this.state.User[0])
     }
     submit(e) {
-        if(e.key == 'Enter'|| e.type == 'click')
-        {
+        if (e.key == 'Enter' || e.type == 'click') {
             e.preventDefault()
             fetch('http://localhost:5000/api/auth/signin',
                 {
@@ -67,41 +74,43 @@ export default class Signin extends Component {
                     this.setState({
                         success: responseJson.success,
                         message: responseJson.message,
-                        UserInfo:responseJson
-                    },()=>{
-                console.log(this.state.UserInfo)
-    
-                    })})
+                        UserInfo: responseJson
+                    }, () => {
+                        console.log(this.state.UserInfo)
+
+                    })
+                })
                 .catch((error) => {
                     console.error(error);
                 });
-            }      
-          
-       }
-       render() {
-        const { success, UserInfo  } = this.state;
+        }
+
+    }
+    render() {
+        if (this.state.logged == true) {
+            return <Redirect to ={{pathname:'/'}}/>
+        }
+        const { success, UserInfo } = this.state;
         const token = localStorage.getItem('jwt-tok')
-        if(success){
-            
-            if(UserInfo.isAdmin){
+        if (success) {
+
+            if (UserInfo.isAdmin) {
                 alert('admin')
                 window.location.reload();
-            return <Redirect to = {{pathname:'/admin_dashboard', 
-            state:{
-                  User:this.state.UserInfo  
-            }}}/>
+                return <Redirect to={{
+                    pathname: '/admin_dashboard',
+                }} />
             }
-            else{
+            else {
                 alert('user')
                 window.location.reload();
-                return <Redirect to = {{pathname:'/user_dashboard', 
-                state:{
-                      User:this.state.UserInfo  
-                }}}/>
+                return <Redirect to={{
+                    pathname: '/user_dashboard',
+                }} />
 
             }
         }
-   
+
         return (
             <div>
                 {/* <Nav /> */}
@@ -115,11 +124,11 @@ export default class Signin extends Component {
                                 <div class="form-group">
                                     <h3>LOGIN</h3>
                                     <label for="exampleInputEmail1" className="email">Email address</label>
-                                    <input type="email" onChange={this.email.bind(this)}  class="form-control inputs" required aria-describedby="emailHelp" placeholder="Enter email" />
+                                    <input type="email" onChange={this.email.bind(this)} class="form-control inputs" required aria-describedby="emailHelp" placeholder="Enter email" />
                                 </div>
                                 <div class="form-group">
                                     <label for="password" className="email">Password</label>
-                                    <input class="password" onChange={this.password.bind(this)} onKeyPress={this.submit.bind(this)}  className="form-control inputs" required placeholder="Enter password" type={this.state.type} />
+                                    <input class="password" onChange={this.password.bind(this)} onKeyPress={this.submit.bind(this)} className="form-control inputs" required placeholder="Enter password" type={this.state.type} />
                                     <div class="hide-show">
                                         <input type="checkbox" onClick={this.showPassword.bind(this)} value={!this.state.value}></input><span className="email" >Show password</span>
                                     </div>

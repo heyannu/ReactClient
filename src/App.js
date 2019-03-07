@@ -16,7 +16,7 @@ import Archive from './Components/ArchiveMOM'
 import Reroute from './Components/reroute';
 import{ BrowserRouter as Router,Route, Redirect } from "react-router-dom";
 import About from './Components/about';
-import Target from './Components/target'
+import Target from './Components/target';
 
 // import UserAccess from './Components/userAccess';
 class App extends Component {

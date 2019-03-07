@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import Modal from 'react-responsive-modal';
 import SyncLoader from 'react-spinners/SyncLoader';
 import Template from './template';
-// import dp from '../Assets/images/user.png'
 import '../Assets/css/actionplan.css';
-import { BrowserRouter as Route, Link } from "react-router-dom";
+import jwt_decode from 'jwt-decode';
+import { BrowserRouter as Route, Link, Redirect } from "react-router-dom";
 export default class AdminDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            User: this.props.location.state.User,
+            User: [],
             ap: [],
             benef: [{
                 nos: '',
@@ -19,6 +19,7 @@ export default class AdminDashboard extends Component {
             targets: [],
             target: '',
             duration: 0,
+            logged: false,
             incub: [{
                 noi: '',
                 ai: 0,
@@ -53,20 +54,27 @@ export default class AdminDashboard extends Component {
         }
     }
     componentDidMount() {
-        this.setState({
-            ap: this.props.location.state.User.apAccess,
-        }, () => {
-            for (var i = 0; i < this.state.actionplan.length; i++) {
-                for (var j = 0; j < this.state.ap.length; j++) {
-                    if (this.state.actionplan[i].id == this.state.ap[j])
-                        this.state.myplans.push(this.state.actionplan[i]);
-                    this.setState({
-                        myplans: this.state.myplans,
-                        open: false
-                    })
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+                ap: decoded.apAccess,
+            }, () => {
+                for (var i = 0; i < this.state.actionplan.length; i++) {
+                    for (var j = 0; j < this.state.ap.length; j++) {
+                        if (this.state.actionplan[i].id == this.state.ap[j])
+                            this.state.myplans.push(this.state.actionplan[i]);
+                        this.setState({
+                            myplans: this.state.myplans,
+                            open: false
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
     }
     noi(e) {
         this.state.incub[0].noi = e.target.value;
@@ -139,7 +147,7 @@ export default class AdminDashboard extends Component {
     findap(e, event) {
 
         this.state.benef[0].nos = this.state.incub[0].noi = ''
-        this.state.benef[0].ad = this.state.benef[0].apNo= this.state.incub[0].ai = this.state.incub[0].apNo = 0
+        this.state.benef[0].ad = this.state.benef[0].apNo = this.state.incub[0].ai = this.state.incub[0].apNo = 0
         this.setState({
             shown: 'none',
             show: 'block',
@@ -171,9 +179,16 @@ export default class AdminDashboard extends Component {
             });
     }
     render() {
-        return (
-            <div>
-                <div className="container" id="admindashboard">
+        if (this.state.logged == false) {
+            return (
+                <div>
+                <center><h1>You need to login to continue!</h1></center>
+            </div>
+            )
+        }
+        else
+            return (
+                <div> <div className="container" id="admindashboard">
                     <Modal open={this.state.open} showCloseIcon={false} center>
                         <div className='container'>
                             <div className="row">
@@ -191,7 +206,7 @@ export default class AdminDashboard extends Component {
                     </Modal>
                     <div className="row">
                         <div className="col-lg-3 col-md-4" id="ad">
-                            <Template User={this.props.location.state.User}></Template>
+                            <Template></Template>
                         </div>
                         <div className="col-lg-8 col-md-8" id="ad2">
                             <div>
@@ -199,18 +214,12 @@ export default class AdminDashboard extends Component {
                                     <li style={{ float: "left" }}>
                                         <Link to={{
                                             pathname: '/user_access',
-                                            state: {
-                                                User: this.props.location.state.User
-                                            }
                                         }}>
                                             <button class="btn btn-outline-info" type="button" style={{ width: '10em', marginTop: '2.0em' }}>
                                                 <span>Grant Access</span>
                                             </button></Link>
-                                            <Link to={{
+                                        <Link to={{
                                             pathname: '/target',
-                                            state: {
-                                                User: this.props.location.state.User
-                                            }
                                         }}>
                                             <button class="btn btn-outline-info" type="button" style={{ width: '10em', marginTop: '2.0em' }}>
                                                 <span>Targets</span>
@@ -224,8 +233,8 @@ export default class AdminDashboard extends Component {
                                                 <span>  {this.state.User.username}</span>
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <Link to={{ pathname: '/admin_dashboard', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-user"></i><span>   Profile</span>  </button></Link>
-                                                <Link to={{ pathname: '/edituser', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-pen"></i><span>   Edit profile</span></button></Link>
+                                                <Link to={{ pathname: '/admin_dashboard'}}><button className="btn"><i className="fa fa-user"></i><span>   Profile</span>  </button></Link>
+                                                <Link to={{ pathname: '/edituser'}}><button className="btn"><i className="fa fa-pen"></i><span>   Edit profile</span></button></Link>
                                                 <a class="dropdown-item" href="/">Something else here</a>
                                             </div>
                                         </div>
@@ -250,15 +259,15 @@ export default class AdminDashboard extends Component {
                             <div style={{ display: this.state.shown, height: '15em', marginTop: '6.5em' }} className="container" >
                                 <center>
                                     <div>
-                                        <h3 style={{color:'black', marginTop:'5em'}}>{this.state.User.username}</h3>
+                                        <h3 style={{ color: 'black', marginTop: '5em' }}>{this.state.User.username}</h3>
                                     </div>
                                 </center>
-                                <h5 style={{fontFamily:'roboto'}}>ADMIN STATUS: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'2em'}}>{this.state.User.isAdmin.toString().toUpperCase()}</span></h5>
-                                <h5 style={{fontFamily:'roboto'}}>FIRST NAME: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'3.5em'}}>{this.state.User.firstName}</span></h5>
-                                <h5 style={{fontFamily:'roboto'}}>LAST NAME: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'3.8em'}}>{this.state.User.lastName}</span></h5>
-                                <h5 style={{fontFamily:'roboto'}}>EMAIL: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'6.6em'}}>{this.state.User.email}</span></h5>
-                                <h5 style={{fontFamily:'roboto'}}>GENDER: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'5.6em'}}>{this.state.User.gender}</span></h5>
-                                <h5 style={{fontFamily:'roboto'}}>DEPARTMENT: <span style={{fontSize:'0.9em', fontWeight:'normal', fontStyle:'normal', marginLeft:'2.9em'}}>{this.state.User.department}</span></h5>
+                                <h5 style={{ fontFamily: 'roboto' }}>ADMIN STATUS: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '2em' }}>{this.state.User.isAdmin.toString().toUpperCase()}</span></h5>
+                                <h5 style={{ fontFamily: 'roboto' }}>FIRST NAME: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '3.5em' }}>{this.state.User.firstName}</span></h5>
+                                <h5 style={{ fontFamily: 'roboto' }}>LAST NAME: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '3.8em' }}>{this.state.User.lastName}</span></h5>
+                                <h5 style={{ fontFamily: 'roboto' }}>EMAIL: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '6.6em' }}>{this.state.User.email}</span></h5>
+                                <h5 style={{ fontFamily: 'roboto' }}>GENDER: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '5.6em' }}>{this.state.User.gender}</span></h5>
+                                <h5 style={{ fontFamily: 'roboto' }}>DEPARTMENT: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '2.9em' }}>{this.state.User.department}</span></h5>
                             </div>
                             <div style={{ display: this.state.show }}>
                                 <div style={{ marginTop: '8em', height: '25em' }}>
@@ -267,8 +276,7 @@ export default class AdminDashboard extends Component {
 
 
                                         {/* <p className='templatelabel'> Disbursed Fund:<span className='templatevalue'>{this.state.disbursed}</span></p>
-
-                                        <p className='templatelabel'> Beneficiaries : <span className='templatevalue'>{this.state.benefl}</span></p> */}
+                                    <p className='templatelabel'> Beneficiaries : <span className='templatevalue'>{this.state.benefl}</span></p> */}
                                     </div>
                                     <div className='row' id='actionforms'>
                                         <div className='col-lg-6' >
@@ -290,17 +298,17 @@ export default class AdminDashboard extends Component {
                                         </div>
                                         <div className='col-lg-6' id='incube'>
                                             <div><h2>Incubator</h2>
-                                            <div class="form-group">
-                                                <label for="id">Name of the Incubator </label>
-                                                <input type="text" class="form-control"
-                                                    onChange={this.noi.bind(this)}
-                                                    value={this.state.incub[0].noi} placeholder="Enter Name of the Startup" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="dept">Amount Invested</label>
-                                                <input type="text" class="form-control" onChange={this.ai.bind(this)} value={this.state.incub[0].ai} placeholder="Enter Amount Disbursed" />
-                                            </div>
-                                            <button onClick={this.incubsubmit.bind(this)}>submit</button></div>
+                                                <div class="form-group">
+                                                    <label for="id">Name of the Incubator </label>
+                                                    <input type="text" class="form-control"
+                                                        onChange={this.noi.bind(this)}
+                                                        value={this.state.incub[0].noi} placeholder="Enter Name of the Startup" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="dept">Amount Invested</label>
+                                                    <input type="text" class="form-control" onChange={this.ai.bind(this)} value={this.state.incub[0].ai} placeholder="Enter Amount Disbursed" />
+                                                </div>
+                                                <button onClick={this.incubsubmit.bind(this)}>submit</button></div>
                                         </div>
                                     </div>
                                 </div>
@@ -309,6 +317,6 @@ export default class AdminDashboard extends Component {
                     </div>
                 </div>
             </div>
-        )
+            )
     }
 }

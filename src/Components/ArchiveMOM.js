@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../Assets/css/actionplan.css';
 import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
+import jwt_decode from 'jwt-decode';
 import Footer from './footer';
 
 
@@ -19,6 +20,7 @@ class Archive extends Component {
                 objective: '',
                 nextDate: ''
             },
+            logged:false,
             fileUpload: null,
             com1: {},
             com2: {},
@@ -34,6 +36,33 @@ class Archive extends Component {
             isDisplay1: false,
             postCreated: false
         };
+    }
+    componentDidMount(){
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+            })
+        }
+        fetch("http://localhost:5000/api/minutes/minutesData")
+        .then(response => response.json())
+        .then(responseJson => {
+            this.setState(
+                {
+                    MOMS: responseJson.amom
+                },
+                () => {
+                    console.log(this.state.MOMS);
+                }
+            );
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
     }
     ap(e) {
         this.state.MOMs.ap = e.target.value;
@@ -207,40 +236,7 @@ class Archive extends Component {
                 console.error(error);
             });
     }
-    // componentDidMount() {
-    //     fetch('http://localhost:5000/api/minutes/minutesData')
-    //         .then((response) => response.json())
-    //         .then((responseJson) => {
-    //             this.setState({
-    //                 MOMS: responseJson.amom
-    //             }, () => {
-    //                 console.log(this.state.MOMS)
-
-    //             })
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    //         window.location.reload();
-    //       }
-
-    componentDidMount() {
-        fetch("http://localhost:5000/api/minutes/minutesData")
-            .then(response => response.json())
-            .then(responseJson => {
-                this.setState(
-                    {
-                        MOMS: responseJson.amom
-                    },
-                    () => {
-                        console.log(this.state.MOMS);
-                    }
-                );
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
+    
     findap1(e) {
         console.log(e);
         this.setState({
@@ -257,6 +253,13 @@ class Archive extends Component {
     }
 
     render() {
+        if(this.state.logged == false){
+            return(
+                <div>
+                <center><h1>You need to login to continue!</h1></center>
+            </div>
+            )
+        }
         const moms = this.state.MOMS.map((mom, i) =>
             <li className='MOMLi hvr-sweep-to-right' onClick={this.click.bind(this)} key={mom._id}><span style={{ display: 'inline' }}> {i + 1}. </span>{mom.objective}</li>
         );
@@ -267,6 +270,7 @@ class Archive extends Component {
         // const pLot = pLots.split(',')
 
         return (
+
             <div>
                 <div style={{ height: '45em' }}>
                     <div className="row" style={{ height: '45em' }}>

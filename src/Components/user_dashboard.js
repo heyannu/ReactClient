@@ -9,13 +9,14 @@ export default class UserDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            User: this.props.location.state.User,
+            User: [],
             email: '',
             status: false,
             success: false,
             open: false,
             loading: false,
             edit: false,
+            logged: false,
             myplans: [],
             ap: [],
             benef: [{
@@ -56,40 +57,105 @@ export default class UserDashboard extends Component {
     }
     componentDidMount() {
         const token = localStorage.getItem('jwt-tok');
-        const decoded = jwt_decode(token);
-        console.log(decoded._id);
-        this.setState({
-            ap: this.state.User.apAccess,
-        }, () => {
-            for (var i = 0; i < this.state.actionplan.length; i++) {
-                for (var j = 0; j < this.state.ap.length; j++) {
-                    if (this.state.actionplan[i].id == this.state.ap[j])
-                        this.state.myplans.push(this.state.actionplan[i]);
-                    this.setState({
-                        myplans: this.state.myplans,
-                        open: false
-                    })
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+                ap: decoded.apAccess,
+            }, () => {
+                for (var i = 0; i < this.state.actionplan.length; i++) {
+                    for (var j = 0; j < this.state.ap.length; j++) {
+                        if (this.state.actionplan[i].id == this.state.ap[j])
+                            this.state.myplans.push(this.state.actionplan[i]);
+                        this.setState({
+                            myplans: this.state.myplans,
+                            open: false
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
+        }
 
-    }
+        onChange(e) {
+            this.state.email = e.target.value;
+            this.setState({
+                email: this.state.email
+            })
+        }
 
-    onChange(e) {
-        this.state.email = e.target.value;
-        this.setState({
-            email: this.state.email
-        })
-    }
+        goVerify(e) {
+            e.preventDefault()
+            this.setState({
+                open: true,
+                loading: true
+            }, () => {
 
-    goVerify(e) {
-        e.preventDefault()
-        this.setState({
-            open: true,
-            loading: true
-        }, () => {
+                fetch('http://localhost:5000/api/auth/verify',
+                    {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: this.state.email,
+                            id: this.state.User.id
 
-            fetch('http://localhost:5000/api/auth/verify',
+                        }),
+                    })
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                        this.setState({
+                            success: responseJson.success,
+                            message: responseJson.message,
+                            email: responseJson,
+                            open: false,
+                            loading: false
+                        }, () => {
+                            if (this.state.success == true) {
+                                this.setState({
+                                    edit: true
+                                })
+                            }
+                        })
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+
+            })
+
+        }
+
+        noi(e) {
+            this.state.incub[0].noi = e.target.value;
+            this.setState({
+                incub: this.state.incub
+            })
+        }
+        ai(e) {
+            this.state.incub[0].ai = e.target.value;
+            this.setState({
+                incub: this.state.incub
+            })
+        }
+        nos(e) {
+            this.state.benef[0].nos = e.target.value;
+            this.setState({
+                benef: this.state.benef
+            })
+        }
+        ad(e) {
+            this.state.benef[0].ad = e.target.value;
+            this.setState({
+                benef: this.state.benef
+            })
+        }
+        benefsubmit() {
+            fetch('http://localhost:5000/api/beneficiary/newBenef/' + this.state.benef[0].apNo,
                 {
                     method: 'POST',
                     headers: {
@@ -97,285 +163,230 @@ export default class UserDashboard extends Component {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: this.state.email,
-                        id: this.state.User.id
-
+                        benef: this.state.benef[0]
                     }),
                 })
                 .then((response) => response.json())
                 .then((responseJson) => {
                     this.setState({
-                        success: responseJson.success,
-                        message: responseJson.message,
-                        email: responseJson,
-                        open: false,
-                        loading: false
-                    }, () => {
-                        if (this.state.success == true) {
-                            this.setState({
-                                edit: true
-                            })
-                        }
+
                     })
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-
-        })
-
-    }
-
-    noi(e) {
-        this.state.incub[0].noi = e.target.value;
-        this.setState({
-            incub: this.state.incub
-        })
-    }
-    ai(e) {
-        this.state.incub[0].ai = e.target.value;
-        this.setState({
-            incub: this.state.incub
-        })
-    }
-    nos(e) {
-        this.state.benef[0].nos = e.target.value;
-        this.setState({
-            benef: this.state.benef
-        })
-    }
-    ad(e) {
-        this.state.benef[0].ad = e.target.value;
-        this.setState({
-            benef: this.state.benef
-        })
-    }
-    benefsubmit() {
-        fetch('http://localhost:5000/api/beneficiary/newBenef/' + this.state.benef[0].apNo,
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    benef: this.state.benef[0]
-                }),
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({
-
+        }
+        incubsubmit(e, event) {
+            fetch('http://localhost:5000/api/incubator/newIncube/' + this.state.incub[0].apNo,
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        benef: this.state.incub[0]
+                    }),
                 })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-    incubsubmit(e, event) {
-        fetch('http://localhost:5000/api/incubator/newIncube/' + this.state.incub[0].apNo,
-            {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    benef: this.state.incub[0]
-                }),
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({
 
+                    })
                 })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-    findap(e, event) {
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+        findap(e, event) {
 
-        this.state.benef[0].nos = this.state.incub[0].noi = ''
-        this.state.benef[0].ad = this.state.benef[0].apNo = this.state.incub[0].ai = this.state.incub[0].apNo = 0
-        this.setState({
-            shown: 'none',
-            show: 'block',
-            benef: this.state.benef,
-            incub: this.state.incub,
+            this.state.benef[0].nos = this.state.incub[0].noi = ''
+            this.state.benef[0].ad = this.state.benef[0].apNo = this.state.incub[0].ai = this.state.incub[0].apNo = 0
+            this.setState({
+                shown: 'none',
+                show: 'block',
+                benef: this.state.benef,
+                incub: this.state.incub,
 
-        })
-        fetch('http://localhost:5000/api/ap/getApDetails/' + e.id,
-            {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                },
             })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.state.benef[0].apNo = responseJson.ap.apNo
-                this.state.incub[0].apNo = responseJson.ap.apNo
-                this.setState({
-                    ap: responseJson.ap,
-                    benef: this.state.benef
-                }, () => {
-                    console.log(this.state.benef)
+            fetch('http://localhost:5000/api/ap/getApDetails/' + e.id,
+                {
+                    method: 'GET',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
                 })
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    this.state.benef[0].apNo = responseJson.ap.apNo
+                    this.state.incub[0].apNo = responseJson.ap.apNo
+                    this.setState({
+                        ap: responseJson.ap,
+                        benef: this.state.benef
+                    }, () => {
+                        console.log(this.state.benef)
+                    })
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
 
 
-    render() {
-        return (
-            <div>
-                <div className="container" id="admindashboard">
-                    <Modal open={this.state.open} showCloseIcon={false} center>
-                        <div className='container'>
-                            <div className="row">
-                                <div className='col-lg-5'><h2>Loading</h2></div>
+        render() {
+            if (this.state.logged == false) {
+                return (
+                    <div>
+                        <center><h1>You need to login to continue!</h1></center>
+                    </div>
+                )
+            }
+            return (
+                <div>
+                    <div className="container" id="admindashboard">
+                        <Modal open={this.state.open} showCloseIcon={false} center>
+                            <div className='container'>
+                                <div className="row">
+                                    <div className='col-lg-5'><h2>Loading</h2></div>
 
-                                <div className='col-lg-5' style={{ marginTop: '0.4em', marginLeft: '1em' }}> <SyncLoader
-                                    color="#00BFFF"
-                                    size="10"
-                                    marginTop='5em'
-                                    loading={this.state.loading}
-                                    style={{ marginTop: '5.1em', marginLeft: '1em' }}>
-                                </SyncLoader> </div> </div>
-                        </div>
+                                    <div className='col-lg-5' style={{ marginTop: '0.4em', marginLeft: '1em' }}> <SyncLoader
+                                        color="#00BFFF"
+                                        size="10"
+                                        marginTop='5em'
+                                        loading={this.state.loading}
+                                        style={{ marginTop: '5.1em', marginLeft: '1em' }}>
+                                    </SyncLoader> </div> </div>
+                            </div>
 
-                    </Modal>
-                    <div className="row">
-                        <div className="col-lg-3 col-md-4" id="ad">
-                            <Template User={this.props.location.state.User}></Template>
-                        </div>
-                        <div className="col-lg-8 col-md-8" id="ad2">
-                            {
-                                this.props.location.state.User.isVerified ?
-                                    (
-                                        <div>
+                        </Modal>
+                        <div className="row">
+                            <div className="col-lg-3 col-md-4" id="ad">
+                                <Template ></Template>
+                            </div>
+                            <div className="col-lg-8 col-md-8" id="ad2">
+                                {
+                                    this.state.User.isVerified ?
+                                        (
                                             <div>
-                                                <ul>
-                                                    <li>
+                                                <div>
+                                                    <ul>
+                                                        <li>
+                                                            <div>
+                                                                <button style={{ marginTop: '-7em' }} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <span>  {this.state.User.username}</span>
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                    <Link to={{ pathname: '/user_dashboard' }}><button className="btn"><i className="fa fa-user"></i><span>   Profile</span>  </button></Link>
+                                                                    <Link to={{ pathname: '/edituser' }}><button className="btn"><i className="fa fa-pen"></i><span>   Edit profile</span></button></Link>
+                                                                    <a class="dropdown-item" href="/">Something else here</a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="dropdown">
+                                                                <button style={{ marginTop: '-7em', marginRight: '14em' }} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <span>Action Plans</span>
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                    {this.state.myplans.map((single) => (
+                                                                        <a class="dropdown-item" onClick={this.findap.bind(this, single)}><span>{single.plan}</span></a>
+                                                                    ))}
+
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div style={{ display: this.state.shown, height: '15em', marginTop: '6.5em' }} className="container" >
+                                                    <center>
                                                         <div>
-                                                            <button style={{marginTop:'-7em'}} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <span>  {this.state.User.username}</span>
-                                                            </button>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                <Link to={{ pathname: '/user_dashboard', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-user"></i><span>   Profile</span>  </button></Link>
-                                                                <Link to={{ pathname: '/edituser', state: { User: this.props.location.state.User } }}><button className="btn"><i className="fa fa-pen"></i><span>   Edit profile</span></button></Link>
-                                                                <a class="dropdown-item" href="/">Something else here</a>
-                                                            </div>
+                                                            <h3 style={{ color: 'black', marginTop: '5em' }}>{this.state.User.username}</h3>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                                <ul>
-                                                    <li>
-                                                        <div class="dropdown">
-                                                            <button style={{marginTop:'-7em', marginRight:'14em'}} class="btn btn-outline-dark dropdown-toggle dropdownMenuButton" id="btn-outline-warning" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <span>Action Plans</span>
-                                                            </button>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                {this.state.myplans.map((single) => (
-                                                                    <a class="dropdown-item" onClick={this.findap.bind(this, single)}><span>{single.plan}</span></a>
-                                                                ))}
-
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div style={{ display: this.state.shown, height: '15em', marginTop: '6.5em' }} className="container" >
-                                                <center>
-                                                    <div>
-                                                        <h3 style={{ color: 'black', marginTop: '5em' }}>{this.state.User.username}</h3>
-                                                    </div>
-                                                </center>
-                                                <h5 style={{ fontFamily: 'roboto' }}>ADMIN STATUS: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '2em' }}>{this.state.User.isAdmin.toString().toUpperCase()}</span></h5>
-                                                <h5 style={{ fontFamily: 'roboto' }}>FIRST NAME: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '3.5em' }}>{this.state.User.firstName}</span></h5>
-                                                <h5 style={{ fontFamily: 'roboto' }}>LAST NAME: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '3.8em' }}>{this.state.User.lastName}</span></h5>
-                                                <h5 style={{ fontFamily: 'roboto' }}>EMAIL: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '6.6em' }}>{this.state.User.email}</span></h5>
-                                                <h5 style={{ fontFamily: 'roboto' }}>GENDER: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '5.6em' }}>{this.state.User.gender}</span></h5>
-                                                <h5 style={{ fontFamily: 'roboto' }}>DEPARTMENT: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '2.9em' }}>{this.state.User.department}</span></h5>
-                                            </div>
-                                            <div style={{ display: this.state.show }}>
-                                                <div style={{ marginTop: '8em', height: '25em' }}>
-                                                    <div className='row' id='title'>
-                                                        <center><p className='templatelabel'> Ap Name:<span className='templatevalue'>{this.state.ap.apNo}</span></p></center>
+                                                    </center>
+                                                    <h5 style={{ fontFamily: 'roboto' }}>ADMIN STATUS: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '2em' }}>{this.state.User.isAdmin.toString().toUpperCase()}</span></h5>
+                                                    <h5 style={{ fontFamily: 'roboto' }}>FIRST NAME: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '3.5em' }}>{this.state.User.firstName}</span></h5>
+                                                    <h5 style={{ fontFamily: 'roboto' }}>LAST NAME: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '3.8em' }}>{this.state.User.lastName}</span></h5>
+                                                    <h5 style={{ fontFamily: 'roboto' }}>EMAIL: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '6.6em' }}>{this.state.User.email}</span></h5>
+                                                    <h5 style={{ fontFamily: 'roboto' }}>GENDER: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '5.6em' }}>{this.state.User.gender}</span></h5>
+                                                    <h5 style={{ fontFamily: 'roboto' }}>DEPARTMENT: <span style={{ fontSize: '0.9em', fontWeight: 'normal', fontStyle: 'normal', marginLeft: '2.9em' }}>{this.state.User.department}</span></h5>
+                                                </div>
+                                                <div style={{ display: this.state.show }}>
+                                                    <div style={{ marginTop: '8em', height: '25em' }}>
+                                                        <div className='row' id='title'>
+                                                            <center><p className='templatelabel'> Ap Name:<span className='templatevalue'>{this.state.ap.apNo}</span></p></center>
 
 
-                                                        {/* <p className='templatelabel'> Disbursed Fund:<span className='templatevalue'>{this.state.disbursed}</span></p>
+                                                            {/* <p className='templatelabel'> Disbursed Fund:<span className='templatevalue'>{this.state.disbursed}</span></p>
                     
                                                             <p className='templatelabel'> Beneficiaries : <span className='templatevalue'>{this.state.benefl}</span></p> */}
-                                                    </div>
-                                                    <div className='row' id='actionforms'>
-                                                        <div className='col-lg-6' >
-                                                            <div >
-                                                                <h2>Benefeciary</h2>
-                                                                <div class="form-group">
-                                                                    <label for="id">Name of the startup </label>
-                                                                    <input type="text" class="form-control"
-                                                                        onChange={this.nos.bind(this)}
-                                                                        value={this.state.benef[0].nos} placeholder="Enter Name of the Startup" />
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="dept">Amount Disbursed</label>
-                                                                    <input type="text" class="form-control" onChange={this.ad.bind(this)} value={this.state.benef[0].ad} placeholder="Enter Amount Disbursed" />
-                                                                </div>
-
-                                                                <button onClick={this.benefsubmit.bind(this)}>submit</button>
-                                                            </div>
                                                         </div>
-                                                        <div className='col-lg-6' id='incube'>
-                                                            <div><h2>Incubator</h2>
-                                                                <div class="form-group">
-                                                                    <label for="id">Name of the Incubator </label>
-                                                                    <input type="text" class="form-control"
-                                                                        onChange={this.noi.bind(this)}
-                                                                        value={this.state.incub[0].noi} placeholder="Enter Name of the Startup" />
+                                                        <div className='row' id='actionforms'>
+                                                            <div className='col-lg-6' >
+                                                                <div >
+                                                                    <h2>Benefeciary</h2>
+                                                                    <div class="form-group">
+                                                                        <label for="id">Name of the startup </label>
+                                                                        <input type="text" class="form-control"
+                                                                            onChange={this.nos.bind(this)}
+                                                                            value={this.state.benef[0].nos} placeholder="Enter Name of the Startup" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="dept">Amount Disbursed</label>
+                                                                        <input type="text" class="form-control" onChange={this.ad.bind(this)} value={this.state.benef[0].ad} placeholder="Enter Amount Disbursed" />
+                                                                    </div>
+
+                                                                    <button onClick={this.benefsubmit.bind(this)}>submit</button>
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label for="dept">Amount Invested</label>
-                                                                    <input type="text" class="form-control" onChange={this.ai.bind(this)} value={this.state.incub[0].ai} placeholder="Enter Amount Disbursed" />
-                                                                </div>
-                                                                <button onClick={this.incubsubmit.bind(this)}>submit</button></div>
+                                                            </div>
+                                                            <div className='col-lg-6' id='incube'>
+                                                                <div><h2>Incubator</h2>
+                                                                    <div class="form-group">
+                                                                        <label for="id">Name of the Incubator </label>
+                                                                        <input type="text" class="form-control"
+                                                                            onChange={this.noi.bind(this)}
+                                                                            value={this.state.incub[0].noi} placeholder="Enter Name of the Startup" />
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="dept">Amount Invested</label>
+                                                                        <input type="text" class="form-control" onChange={this.ai.bind(this)} value={this.state.incub[0].ai} placeholder="Enter Amount Disbursed" />
+                                                                    </div>
+                                                                    <button onClick={this.incubsubmit.bind(this)}>submit</button></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                    :
-                                    (
-                                        <div>
+                                        )
+                                        :
+                                        (
+                                            <div>
 
-                                            <h2 style={{ marginLeft:'8em', width:'8em', marginTop:'6em' }} className='VerifyMessage'>Verify Your Email</h2>
-                                            <input style={{ marginLeft:'10em', width: '25em' }} type='text' className='form-control verifyfrom' onChange={this.onChange.bind(this)} readOnly={this.state.edit} placeholder='Enter Your Email To Verify'></input>
-                                            <button style={{ marginLeft:'19em', width:'8em' }} type="submit" onClick={this.goVerify.bind(this)} class="btn btn-outline-info">Verify</button>
+                                                <h2 style={{ marginLeft: '8em', width: '8em', marginTop: '6em' }} className='VerifyMessage'>Verify Your Email</h2>
+                                                <input style={{ marginLeft: '10em', width: '25em' }} type='text' className='form-control verifyfrom' onChange={this.onChange.bind(this)} readOnly={this.state.edit} placeholder='Enter Your Email To Verify'></input>
+                                                <button style={{ marginLeft: '19em', width: '8em' }} type="submit" onClick={this.goVerify.bind(this)} class="btn btn-outline-info">Verify</button>
 
-                                        </div>
-                                    )
-                            }
-                            <div style={{ display: this.state.show }}>
-                                <div style={{ marginTop: '8em', height: '25em' }}>
-                                    <div className='row' id='title'>
-                                        {/* <center><p className='templatelabel'> Ap Name:<span className='templatevalue'>{this.state.ap.apNo}</span></p></center> */}
+                                            </div>
+                                        )
+                                }
+                                <div style={{ display: this.state.show }}>
+                                    <div style={{ marginTop: '8em', height: '25em' }}>
+                                        <div className='row' id='title'>
+                                            {/* <center><p className='templatelabel'> Ap Name:<span className='templatevalue'>{this.state.ap.apNo}</span></p></center> */}
 
 
-                                        {/* <p className='templatelabel'> Disbursed Fund:<span className='templatevalue'>{this.state.disbursed}</span></p>
+                                            {/* <p className='templatelabel'> Disbursed Fund:<span className='templatevalue'>{this.state.disbursed}</span></p>
 
                                         <p className='templatelabel'> Beneficiaries : <span className='templatevalue'>{this.state.benefl}</span></p> */}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
-}

@@ -18,19 +18,16 @@ import research from "../Assets/icons/research.png";
 import tax1 from "../Assets/icons/tax1.png";
 import tax3 from "../Assets/icons/tax3.png";
 import tax from "../Assets/icons/tax.png";
-import facebook from "../Assets/footer-icons/facebook.png";
-import twitter from "../Assets/footer-icons/twitter.png";
-import govt from "../Assets/footer-icons/govt.png";
 import "../Assets/css/actionplan.css";
+import jwt_decode from 'jwt-decode';
 import Modal from "react-responsive-modal";
 import ClipLoader from "react-spinners/ClipLoader";
 import Footer from "./footer";
-
+import { BrowserRouter as Router, Route, Link, Redirect, withRouter } from "react-router-dom";
 export default class ActionPlan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // links: [{
       links: [],
       showPlans: "block",
       NEWS: [],
@@ -39,26 +36,13 @@ export default class ActionPlan extends Component {
       disbursed: "",
       incubator: [],
       benef: [],
-      color: '',
-      nottopic: 'inline',
-      topic: [],
       ap: 'none',
-      showtopic: 'none',
-      hidebutton: 'inline',
-      showbutton: 'none',
       selectedPlan: [],
-      disbursed: '',
-      get: false,
-      targets: [],
-      target: [],
+      logged: false,
       reason: "",
       duration: 0,
       stat: 0,
-      createdDate: 0,
-      specDate: 0,
-      app: [],
-      response: []
-      , actionplan: [
+      actionplan: [
         { id: 1, plan: "Compliance Regime based on Self-certification " },
         { id: 2, plan: "Startup India Hub" },
         { id: 3, plan: "Rolling out of Mobile App and Portal" },
@@ -111,6 +95,15 @@ export default class ActionPlan extends Component {
     };
   }
   componentDidMount() {
+    const token = localStorage.getItem('jwt-tok');
+    if (token != null) {
+      const decoded = jwt_decode(token);
+      this.setState({
+        User: decoded,
+        logged: true
+      })
+    }
+
     fetch("http://localhost:5000/api/iNews")
       .then(response => response.json())
       .then(responseJson => {
@@ -126,42 +119,28 @@ export default class ActionPlan extends Component {
       .catch(error => {
         console.error(error);
       });
-    // this.setState({
-    //           ap: this.props.location.state.User.apAccess,
-    //       }, () => {
-    //           for (var i = 0; i < this.state.actionplan.length; i++) {
-    //               for (var j = 0; j < this.state.ap.length; j++) {
-    //                   if (this.state.actionplan[i].id == this.state.ap[j])
-    //                       this.state.myplans.push(this.state.actionplan[i]);
-    //                   this.setState({
-    //                       myplans: this.state.myplans,
-    //                       open: false
-    //                   })
-    //               }
-    //           }
-    //       })
   }
 
   show() {
     this.setState({
       showPlans: "block",
       ap: "none",
-      nottopic: 'inline', 
+      nottopic: 'inline',
       ap: 'none',
       showtopic: 'none',
       hidebutton: 'inline',
       showbutton: 'none',
-      topic:''
-  
+      topic: ''
+
     });
 
-    
+
   }
   findPlan(planNo, e) {
     this.setState({
       showPlans: "none",
       showtopic: 'none',
-    
+
       ap: "block",
       open: true
     });
@@ -190,57 +169,6 @@ export default class ActionPlan extends Component {
 
           }
         );
-        // for (var j = 0; j < this.state.targets.ap.target.length; j++) {
-        // for (var i = 0; i < this.state.targets.ap.target.objective.length; i++) {
-        var p = this.state.targets.ap.target[0].objective;
-        this.state.response.push(p)
-        console.log(this.state.response)
-        // }
-        // }
-        var n = this.state.selectedPlan.apNo
-        if (this.state.targets.ap.target[0].status == 2) {
-          this.setState({
-            showbutton: 'inline'
-          })
-        }
-        if (this.state.targets.ap.target[0].status == 0) {
-          this.setState({
-            status: 'not completed',
-            color: 'orange',
-            hidebutton: 'inline',
-            showbutton: 'none'
-          })
-        }
-        else if (this.state.targets.ap.target[0].status == 1) {
-          this.setState({
-            status: 'completed',
-            hidebutton: 'none',
-            color: 'green',
-            showbutton: 'none'
-
-          })
-        }
-        else if (this.state.targets.ap.target[0].status == 2) {
-          this.setState({
-            status: 'delayed',
-            color: 'red',
-            hidebutton: 'none',
-            showbutton: 'inline'
-          })
-        }
-        var d = new Date(
-          this.state.targets.ap.target[0].createdOn
-        );
-        var dd = new Date(this.state.targets.ap.target[0].specDate)
-        this.setState({
-          response: this.state.response,
-          topic: this.state.targets.ap.target[0].topic,
-          duration: this.state.targets.ap.target[0].duration,
-          stat: this.state.targets.ap.target[0].status,
-          createdDate: dd.getDate() + '-' + dd.getMonth() + '-' + dd.getFullYear(),
-          specDate: d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear()
-        }, () => {
-        })
       })
       .catch(error => {
         console.error(error);
@@ -252,81 +180,18 @@ export default class ActionPlan extends Component {
       nottopic: 'none'
     })
   }
-  confirm() {
-    for (var i = 0; i < this.state.app.length; i++) {
-      var x = this.state.app[i];
-      console.log(x)
-      this.state.targets.ap.target[0].apStats[x] = 1;
-    }
-    this.setState({
-      apStats: this.state.apStats
-    }, () => {
-      console.log
-        (this.state.targets.ap.target[0].apStats)
-    })
-    fetch('http://localhost:5000/api/target/' + this.state.targets.ap.target[0]._id + '/confirm',
-      {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          apNo: this.state.app,
-          apStats: this.state.targets.ap.target[0].apStats
-        }),
-
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-
-        })
-        console.log(responseJson)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    if (this.state.stat == 2) {
-      this.setState({
-        showbutton: 'inline'
-      })
-    }
-
-  }
-  submitdelay() {
-    this.setState({
-      hidebutton: 'none'
-    })
-    fetch('http://localhost:5000/api/target/' + this.state.targets.ap.target[0]._id + '/delay',
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          rod: this.state.reason
-        }),
-
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          hidebutton: 'inline',
-          showbutton: 'none'
-        })
-        console.log(responseJson)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
   reason(e) {
     this.setState({ reason: e.target.value })
   }
 
   render() {
+    if (this.state.logged == false) {
+      return (
+      <div>
+        <center><h1>You need to login to continue!</h1></center>
+      </div>
+      )
+    }
     const newss = this.state.NEWS.map((news, i) => (
       <li key={news._id} className="list hvr-sweep-to-right">
         <span style={{ display: "inline", listStyleType: "none" }}>
@@ -819,96 +684,50 @@ export default class ActionPlan extends Component {
                 <div className="container" style={{ display: this.state.ap }}>
                   <br />
                   <br />
-                 
-                  <div style={{display:this.state.nottopic}}><p className="templatelabel">
+
+                  <div style={{ display: this.state.nottopic }}><p className="templatelabel">
                     {" "}
                     Apno:
                     <span className="templatevalue">
                       {this.state.selectedPlan.apNo}
                     </span>
                   </p>
-                  <p className="templatelabel">
-                    {" "}
-                    Sanctioned Fund:
+                    <p className="templatelabel">
+                      {" "}
+                      Sanctioned Fund:
                     <span className="templatevalue">
-                      {this.state.sanctioned}
-                    </span>
-                  </p>
-                  <p className="templatelabel">
-                    {" "}
-                    Disbursed Fund:
+                        {this.state.sanctioned}
+                      </span>
+                    </p>
+                    <p className="templatelabel">
+                      {" "}
+                      Disbursed Fund:
                     <span className="templatevalue">
-                      {this.state.disbursed}
-                    </span>
-                  </p>
-                  <p className="templatelabel">
+                        {this.state.disbursed}
+                      </span>
+                    </p>
+                    <p className="templatelabel">
 
-                    Number Of Startups:{" "}
-                    <span className="templatevalue">{beneflen}</span>
-                  </p>
-                  <p className="templatelabel">
+                      Number Of Startups:{" "}
+                      <span className="templatevalue">{beneflen}</span>
+                    </p>
+                    <p className="templatelabel">
 
-                    Number Of Incubators:{" "}
-                    <span className="templatevalue">{incubelen}</span>
-                  </p>
-                  <p className="templatelabel" id="beninc">
+                      Number Of Incubators:{" "}
+                      <span className="templatevalue">{incubelen}</span>
+                    </p>
+                    <p className="templatelabel" id="beninc">
 
-                    Beneficiaries:{" "}
-                    <span className="templatevalue">{benefs}</span>
-                  </p>
-                  <p className="templatelabel" id="beninc">
+                      Beneficiaries:{" "}
+                      <span className="templatevalue">{benefs}</span>
+                    </p>
+                    <p className="templatelabel" id="beninc">
 
-                    Incubators: <span className="templatevalue">{incubs}</span>
-                  </p>
-                  <p className="templatelabel" id="beninc">
-                    <p onClick={this.topicshow.bind(this)} className='templatelabel' id='beninc'> Topic: <span className='templatevalue'>{this.state.topic}</span></p>
-                 
-                  </p>
-</div>
-                  {
-                    (this.state.get) ?
-                      <div>
-                        <div style={{ display: this.state.showtopic }}>
-                          <div className='container'>
-                            <br></br><br></br>
+                      Incubators: <span className="templatevalue">{incubs}</span>
+                    </p>
 
-                            {/* <h2 id='color' style={{ marginTop: '0.7em' }}>{this.state.topic}</h2> */}
-
-                            
-                            <h2 style={{ color: '#000' }}>{this.state.topic}</h2>
-                            {this.state.response.map((fi, b) => (
-                              <li className='templatelabel'>{b + 1}.<span className='templatevalue'>{fi}</span></li>
-                            ))}
-                            <p className='templatelabel' id='beninc'> Duration: <span className='templatevalue'>{this.state.duration}</span></p>
-                            <p className='templatelabel' id='beninc'> Status: <span style={{ color: this.state.color }} className='templatevalue'>{this.state.status}</span></p>
-                            <p className='templatelabel' id='beninc'> Start Date: <span className='templatevalue'>{this.state.specDate}</span></p>
-                            <p className='templatelabel' id='beninc'> Expected End Date: <span className='templatevalue'>{this.state.createdDate}</span></p>
-                          </div>
-                          <div class="form-group" style={{ display: this.state.showbutton }}>
-                            <label for="id">Reason for delay </label>
-                            <input type="text" class="form-control"
-                              onChange={this.reason.bind(this)}
-                              placeholder="Enter delay reason" />
-                          </div>
-                          <button style={{ display: this.state.hidebutton }} onClick={this.confirm.bind(this)}>Confirm</button>
-                          <button style={{ display: this.state.showbutton }} onClick={this.submitdelay.bind(this)}>Delay</button>
-                        </div>
-                      </div> :
-                      <div>
-                        
-                      </div>
-                  }
-                </div>
-                <div className="row">
-                  
-                  <div className="col-lg-3" >
-                    <button
-                      className="btn btn-outline-dark"
-                      onClick={this.show.bind(this)}
-                    >
-                      Go back
-                    </button>
                   </div>
+
                 </div>
 
               </div>

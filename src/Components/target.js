@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import jwt_decode from 'jwt-decode';
 import Template from './template';
 // import dp from '../Assets/images/user.png'
 import '../Assets/css/actionplan.css';
@@ -9,7 +9,7 @@ export default class Target extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            User: this.props.location.state.User,
+            User: [],
             ap: [],
             showtarget: 'inline',
             showduration: 'none',
@@ -22,6 +22,7 @@ export default class Target extends Component {
             pap: [],
             app: [],
             myplans: [],
+            logged:false,
             actionplan: [
                 { id: 1, plan: 'Compliance Regime based on Self-certification ' },
                 { id: 2, plan: 'Startup India Hub' },
@@ -49,8 +50,17 @@ export default class Target extends Component {
         }
     }
     componentDidMount() {
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+            })
+        }
         this.setState({
-            ap: this.props.location.state.User.apAccess,
+            ap: this.state.User.apAccess,
         }, () => {
             for (var i = 0; i < this.state.actionplan.length; i++) {
                 for (var j = 0; j < this.state.ap.length; j++) {
@@ -138,7 +148,7 @@ export default class Target extends Component {
                 <div className="container" id="admindashboard">
                     <div className="row">
                         <div className="col-lg-3 col-md-4" id="ad">
-                            <Template User={this.props.location.state.User}></Template>
+                            <Template></Template>
                         </div>
                         <div className="col-lg-8 col-md-8" id="ad2" style={{ marginTop: '' }}>
                             <div>

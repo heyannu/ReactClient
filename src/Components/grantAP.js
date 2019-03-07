@@ -2,23 +2,35 @@ import React, { Component } from 'react';
 import { BrowserRouter as Route, Link, Redirect } from "react-router-dom";
 import Template from './template';
 import Modal from 'react-responsive-modal';
+import jwt_decode from 'jwt-decode';
 import '../Assets/css/actionplan.css';
 export default class GrantAp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            thissuser: this.props.location.state.selectedUser,
-            User: this.props.location.state.User,
+            thissuser:[],
+            User: [],
             Users: [],
             ap: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
             selectedap: [],
             redirect: false,
             message: '',
-            open: false
+            open: false,
+            logged: false
         }
     }
     componentDidMount() {
-        console.log(this.props.location.state.selectedUser)
+        console.log(this.props)
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                thissuser: this.props.location.state.selectedUser,
+                logged: true
+            })
+        }
 
     }
     close() {
@@ -77,26 +89,29 @@ export default class GrantAp extends Component {
             return <Redirect to={{
                 pathname: "/admin_dashboard",
                 state: {
-                    User: this.props.location.state.User,
                     selectedap: this.state.selectedap
                 }
             }} />
+        }
+        else if (this.state.logged == false) {
+            return (
+                <div>
+                <center><h1>You need to login to continue!</h1></center>
+            </div>
+            )
         }
         return (
             <div>
                 <div className="container" id="admindashboard">
                     <div className="row">
                         <div className="col-lg-3 col-md-4" id="ad">
-                            <Template User={this.props.location.state.User} />
+                            <Template />
                         </div>
                         <div className="col-lg-8 col-md-8" id="ad5">
                             <div className="row">
                                 <div className='col-lg-4'><h2 style={{ marginTop: '1.4em' }}><span>{this.state.thissuser.username}</span></h2></div>
                                 <Link to={{
                                     pathname: "/admin_dashboard",
-                                    state: {
-                                        User: this.props.location.state.User
-                                    }
                                 }}><div className="col-lg-8">
                                         <button className="btn btn-dark" style={{ width: '8em', marginTop: '2.5em', float: 'right' }}>Go Back</button>
                                     </div>

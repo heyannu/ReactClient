@@ -2,18 +2,30 @@ import React, { Component } from 'react';
 import { BrowserRouter as Route, Link,Redirect } from "react-router-dom";
 import Template from './template';
 import '../Assets/css/actionplan.css';
+import jwt_decode from 'jwt-decode';
 import Modal from 'react-responsive-modal';
 export default class Edituser extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            User: this.props.location.state.User,
+            User: [],
             redirect: false,
-            open: false
+            open: false,
+            logged: false
         }
     }
     componentDidMount() {
-
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+                ap: decoded.apAccess,
+            })
+        }
+    
     }
     firstname(e) {
         this.state.User.firstName = e.target.value;
@@ -93,10 +105,16 @@ export default class Edituser extends Component {
     }
     render() {
         if(this.state.redirect == true){
-            return <Redirect to ={{pathname:'/admin_dashboard', state:{
-                User:this.state.User
-            }}} />
+            return <Redirect to ={{pathname:'/admin_dashboard'}} />
         }
+        else if (this.state.logged == false) {
+                return (
+                    <div>
+                    <center><h1>You need to login to continue!</h1></center>
+                </div>
+                )
+            }
+        else 
         return (
             <div>
                 <Modal open={this.state.open} showCloseIcon={false} center>
@@ -109,7 +127,7 @@ export default class Edituser extends Component {
                 <div className="container" id="admindashboard">
                     <div className="row">
                         <div className="col-lg-3 col-md-4" id="ad4">
-                            <Template User={this.state.User} />
+                            <Template />
 
                         </div>
                         <div className="col-lg-8 col-md-8" id="ad3">
@@ -149,9 +167,6 @@ export default class Edituser extends Component {
                                     <button type="submit" onClick={this.submit.bind(this)} class="btn btn-primary">Submit</button>
                                     <Link to={{
                                         pathname: "/admin_dashboard",
-                                        state: {
-                                            User: this.props.location.state.User
-                                        }
                                     }}><button type="submit" class="btn btn-danger" style={{ marginLeft: '1em' }}>Cancel</button>
                                     </Link>
                                 </div>

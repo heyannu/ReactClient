@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import { withFauxDOM } from 'react-faux-dom';
-
+import jwt_decode from 'jwt-decode';
 class Status extends Component {
     constructor(props) {
         super(props);
@@ -33,11 +33,21 @@ class Status extends Component {
             noi: [],
             fs: [],
             fd: [],
+            logged:false,
             choice: ''
         }
     }
 
     componentDidMount() {
+        const token = localStorage.getItem('jwt-tok');
+        if (token != null) {
+            const decoded = jwt_decode(token);
+            console.log(decoded)
+            this.setState({
+                User: decoded,
+                logged: true,
+            })
+        }
         fetch('http://localhost:5000/api/ap/newTarget/all',
             {
                 method: 'GET'
@@ -537,6 +547,13 @@ class Status extends Component {
 }
 
     render() {
+        if (this.state.logged == false) {
+            return (
+                <div>
+                <center><h1>You need to login to continue!</h1></center>
+            </div>
+            )
+        }
         return (
             <div>
                 <center>
